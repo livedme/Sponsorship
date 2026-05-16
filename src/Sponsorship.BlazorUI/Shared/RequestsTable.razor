@@ -1,0 +1,54 @@
+@inject NavigationManager Nav
+
+<MudTable Items="Requests" Hover="true" Dense="false" Elevation="0" Style="background:transparent;">
+    <HeaderContent>
+        <MudTh Style="font-size:0.7rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#64748B;">Title</MudTh>
+        <MudTh Style="font-size:0.7rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#64748B;">Requestor</MudTh>
+        <MudTh Style="font-size:0.7rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#64748B;">Event</MudTh>
+        <MudTh Style="font-size:0.7rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#64748B;">Amount</MudTh>
+        <MudTh Style="font-size:0.7rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#64748B;">Status</MudTh>
+        <MudTh Style="font-size:0.7rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#64748B;">Date</MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd Style="font-weight:500;">@context.RequestTitle</MudTd>
+        <MudTd Style="color:#475569;">@context.RequestorName</MudTd>
+        <MudTd Style="color:#475569;">@context.EventName</MudTd>
+        <MudTd Style="font-weight:600;">$@context.RequestedAmount.ToString("N2")</MudTd>
+        <MudTd>
+            <span class="status-badge @StatusClass(context.Status)">@StatusLabel(context.Status)</span>
+        </MudTd>
+        <MudTd Style="color:#64748B; font-size:0.8rem;">@context.CreatedAt.ToShortDateString()</MudTd>
+        <MudTd>
+            <MudIconButton Icon="@Icons.Material.Filled.ArrowForward" Size="Size.Small" Color="Color.Primary"
+                           OnClick="@(() => Nav.NavigateTo($"/requests/{context.Id}"))" />
+        </MudTd>
+    </RowTemplate>
+    <NoRecordsContent>
+        <div class="d-flex flex-column align-center pa-8">
+            <MudIcon Icon="@Icons.Material.Filled.Inbox" Style="font-size:3rem; color:#CBD5E1; margin-bottom:0.5rem;" />
+            <MudText Style="color:#94A3B8;">No requests found.</MudText>
+        </div>
+    </NoRecordsContent>
+</MudTable>
+
+@code {
+    [Parameter] public List<SponsorshipRequestDto> Requests { get; set; } = new();
+
+    string StatusClass(string status) => status switch
+    {
+        "Draft" => "status-draft",
+        "PendingManagerApproval" or "PendingFinanceReview" => "status-pending",
+        "Approved" => "status-approved",
+        "Rejected" => "status-rejected",
+        "Cancelled" => "status-cancelled",
+        _ => "status-draft"
+    };
+
+    string StatusLabel(string status) => status switch
+    {
+        "PendingManagerApproval" => "Pending Approval",
+        "PendingFinanceReview" => "Finance Review",
+        _ => status
+    };
+}

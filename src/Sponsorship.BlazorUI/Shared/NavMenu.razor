@@ -1,0 +1,49 @@
+﻿@using System.Security.Claims
+
+<AuthorizeView>
+    <Authorized>
+        <MudNavMenu Style="padding:0.5rem 0;">
+            <div class="nav-section-label">Overview</div>
+            <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard" Style="color:#CBD5E1;">
+                Dashboard
+            </MudNavLink>
+
+            <AuthorizeView Roles="Requestor" Context="_r">
+                <div class="nav-section-label">Requests</div>
+                <MudNavLink Href="/requests/new" Icon="@Icons.Material.Filled.AddCircle" Style="color:#CBD5E1;">
+                    New Request
+                </MudNavLink>
+                <MudNavLink Href="/requests" Icon="@Icons.Material.Filled.List" Style="color:#CBD5E1;">
+                    My Requests
+                </MudNavLink>
+            </AuthorizeView>
+
+            <AuthorizeView Roles="Manager" Context="_m">
+                <div class="nav-section-label">Approvals</div>
+                <MudNavLink Href="/manager" Icon="@Icons.Material.Filled.Approval" Style="color:#CBD5E1;">
+                    Pending Approvals
+                </MudNavLink>
+            </AuthorizeView>
+
+            <AuthorizeView Roles="FinanceAdmin" Context="_f">
+                <div class="nav-section-label">Finance</div>
+                <MudNavLink Href="/finance" Icon="@Icons.Material.Filled.AccountBalance" Style="color:#CBD5E1;">
+                    Finance Review
+                </MudNavLink>
+            </AuthorizeView>
+
+            <AuthorizeView Roles="SystemAdmin" Context="_a">
+                <div class="nav-section-label">Administration</div>
+                <MudNavLink Href="/admin/requests" Icon="@Icons.Material.Filled.AdminPanelSettings" Style="color:#CBD5E1;">
+                    All Requests
+                </MudNavLink>
+                <MudNavLink Href="/admin/audit" Icon="@Icons.Material.Filled.History" Style="color:#CBD5E1;">
+                    Audit Log
+                </MudNavLink>
+                <MudNavLink Href="/admin/types" Icon="@Icons.Material.Filled.Category" Style="color:#CBD5E1;">
+                    Sponsorship Types
+                </MudNavLink>
+            </AuthorizeView>
+        </MudNavMenu>
+    </Authorized>
+</AuthorizeView>

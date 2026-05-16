@@ -1,0 +1,34 @@
+@page "/requests/new"
+@attribute [Authorize(Roles = "Requestor")]
+@inject ApiService Api
+@inject NavigationManager Nav
+@inject ISnackbar Snackbar
+
+<RequestForm Types="_types" OnSubmit="HandleCreate" OnSaveDraft="HandleDraft" />
+
+@code {
+    List<SponsorshipTypeDto> _types = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _types = await Api.GetSponsorshipTypesAsync();
+    }
+
+    async Task HandleCreate(CreateSponsorshipRequestDto dto)
+    {
+        var result = await Api.CreateRequestAsync(dto);
+        if (result == null) { Snackbar.Add($"Failed to create request. {Api.LastError}", Severity.Error); return; }
+        // Auto-submit
+        await Api.SubmitRequestAsync(result.Id);
+        Snackbar.Add("Request submitted successfully!", Severity.Success);
+        Nav.NavigateTo("/requests");
+    }
+
+    async Task HandleDraft(CreateSponsorshipRequestDto dto)
+    {
+        var result = await Api.CreateRequestAsync(dto);
+        if (result == null) { Snackbar.Add($"Failed to save draft. {Api.LastError}", Severity.Error); return; }
+        Snackbar.Add("Draft saved.", Severity.Info);
+        Nav.NavigateTo("/requests");
+    }
+}

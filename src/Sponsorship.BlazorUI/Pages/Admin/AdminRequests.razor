@@ -1,0 +1,15 @@
+@page "/admin/requests"
+@attribute [Authorize(Roles = "SystemAdmin")]
+@inject ApiService Api
+
+<PageTitle>Admin – All Requests</PageTitle>
+<MudText Typo="Typo.h5" Class="mb-4">All Sponsorship Requests</MudText>
+
+@if (_requests == null) { <MudProgressCircular Indeterminate="true" /> }
+else { <RequestsTable Requests="_requests" /> }
+
+@code {
+    List<SponsorshipRequestDto>? _requests;
+    protected override async Task OnInitializedAsync()
+        => _requests = await Api.AdminGetAllRequestsAsync();
+}

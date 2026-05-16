@@ -1,0 +1,92 @@
+@inject ISnackbar Snackbar
+
+<MudCard Elevation="5"  Class="mt-5">
+    <MudCardContent>       
+        <PageTitle>New Sponsorship Request</PageTitle>
+        <MudText Typo="Typo.h5" Class="mb-4">New Sponsorship Request</MudText>
+
+        <div class="form-section-title">Basic Information</div>
+        <MudGrid Class="mb-2">
+            <MudItem xs="12" sm="6">
+                <MudTextField @bind-Value="Model.RequestTitle" Label="Request Title" Required="true"
+                              Variant="Variant.Outlined" />
+            </MudItem>
+            <MudItem xs="12" sm="6">
+                <MudTextField @bind-Value="Model.Department" Label="Department" Required="true"
+                              Variant="Variant.Outlined" />
+            </MudItem>
+            <MudItem xs="12" sm="6">
+                <MudSelect @bind-Value="Model.SponsorshipTypeId" Label="Sponsorship Type" Required="true"
+                           Variant="Variant.Outlined">
+                    @foreach (var t in Types)
+                    {
+                        <MudSelectItem Value="@t.Id">@t.Name</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
+        </MudGrid>
+
+        <div class="form-section-title">Event Details</div>
+        <MudGrid Class="mb-2">
+            <MudItem xs="12" sm="6">
+                <MudTextField @bind-Value="Model.EventName" Label="Event Name" Required="true"
+                              Variant="Variant.Outlined" />
+            </MudItem>
+            <MudItem xs="12" sm="6">
+                <MudDatePicker Date="_eventDate" Label="Event Date" Required="true"
+                               Variant="Variant.Outlined"
+                               DateChanged="@(d => { _eventDate = d; Model.EventDate = d ?? Model.EventDate; })" />
+            </MudItem>
+        </MudGrid>
+
+        <div class="form-section-title">Financial & Purpose</div>
+        <MudGrid>
+            <MudItem xs="12" sm="6">
+                <MudNumericField @bind-Value="Model.RequestedAmount" Label="Requested Amount (USD)"
+                                 Required="true" Variant="Variant.Outlined" Min="0" />
+            </MudItem>
+            <MudItem xs="12">
+                <MudTextField @bind-Value="Model.Purpose" Label="Purpose" Required="true"
+                              Variant="Variant.Outlined" Lines="3" />
+            </MudItem>
+            <MudItem xs="12">
+                <MudTextField @bind-Value="Model.ExpectedBusinessBenefit" Label="Expected Business Benefit"
+                              Variant="Variant.Outlined" Lines="3" />
+            </MudItem>
+            <MudItem xs="12">
+                <MudTextField @bind-Value="Model.SupportingDocumentUrl" Label="Supporting Document URL"
+                              Variant="Variant.Outlined"
+                              Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Link" />
+            </MudItem>
+        </MudGrid>
+    </MudCardContent>
+    <MudCardActions Class="px-4 pb-4 gap-2">
+        @if (OnSaveDraft.HasDelegate)
+        {
+            <MudButton Variant="Variant.Outlined" Color="Color.Secondary"
+                       StartIcon="@Icons.Material.Filled.Save"
+                       OnClick="@(() => OnSaveDraft.InvokeAsync(Model))">
+                Save Draft
+            </MudButton>
+        }
+        <MudButton Variant="Variant.Filled" Color="Color.Primary"
+                   StartIcon="@Icons.Material.Filled.Send"
+                   OnClick="@(() => OnSubmit.InvokeAsync(Model))">
+            Submit Request
+        </MudButton>
+    </MudCardActions>
+</MudCard>
+
+@code {
+    [Parameter] public CreateSponsorshipRequestDto Model { get; set; } = new();
+    [Parameter] public List<SponsorshipTypeDto> Types { get; set; } = new();
+    [Parameter] public EventCallback<CreateSponsorshipRequestDto> OnSubmit { get; set; }
+    [Parameter] public EventCallback<CreateSponsorshipRequestDto> OnSaveDraft { get; set; }
+
+    DateTime? _eventDate;
+
+    protected override void OnParametersSet()
+    {
+        _eventDate = Model.EventDate == default ? DateTime.Today.AddMonths(1) : Model.EventDate;
+    }
+}

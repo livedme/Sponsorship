@@ -1,0 +1,195 @@
+@page "/requests/{Id}"
+@attribute [Authorize]
+@inject ApiService Api
+@inject NavigationManager Nav
+@inject ISnackbar Snackbar
+@using System.Security.Claims
+
+<PageTitle>Request Detail</PageTitle>
+
+@if (_request == null)
+{
+    <MudProgressLinear Indeterminate="true" Color="Color.Primary" Class="mb-4" />
+}
+else
+{
+    <!-- Page header -->
+    <div class="page-header d-flex align-center justify-space-between mb-4">
+        <div>
+            <MudText Typo="Typo.h5" Style="font-weight:700; color:white; margin:0;">@_request.RequestTitle</MudText>
+            <span class="status-badge @StatusClass(_request.Status) mt-1" style="margin-top:6px; display:inline-flex;">@StatusLabel(_request.Status)</span>
+        </div>
+        <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" Style="color:white;" OnClick="@(() => Nav.NavigateTo("/"))" />
+    </div>
+
+    <MudGrid>
+        <MudItem xs="12" md="8">
+            <MudCard Class="mb-4" Elevation="1">
+                <MudCardHeader><MudText Typo="Typo.subtitle1" Style="font-weight:600;">Request Details</MudText></MudCardHeader>
+                <MudCardContent>
+                    <MudGrid>
+                        <MudItem xs="6"><MudText><b>Requestor:</b> @_request.RequestorName</MudText></MudItem>
+                        <MudItem xs="6"><MudText><b>Department:</b> @_request.Department</MudText></MudItem>
+                        <MudItem xs="6"><MudText><b>Type:</b> @_request.SponsorshipTypeName</MudText></MudItem>
+                        <MudItem xs="6"><MudText><b>Event:</b> @_request.EventName</MudText></MudItem>
+                        <MudItem xs="6"><MudText><b>Event Date:</b> @_request.EventDate.ToShortDateString()</MudText></MudItem>
+                        <MudItem xs="6"><MudText><b>Amount:</b> $@_request.RequestedAmount.ToString("N2")</MudText></MudItem>
+                        <MudItem xs="12"><MudText><b>Purpose:</b> @_request.Purpose</MudText></MudItem>
+                        @if (!string.IsNullOrEmpty(_request.ExpectedBusinessBenefit))
+                        {
+                            <MudItem xs="12"><MudText><b>Business Benefit:</b> @_request.ExpectedBusinessBenefit</MudText></MudItem>
+                        }
+                        @if (!string.IsNullOrEmpty(_request.SupportingDocumentUrl))
+                        {
+                            <MudItem xs="12">
+                                <MudText><b>Document:</b> <MudLink Href="@_request.SupportingDocumentUrl" Target="_blank">View</MudLink></MudText>
+                            </MudItem>
+                        }
+                    </MudGrid>
+                </MudCardContent>
+            </MudCard>
+
+            <!-- Role-based action panel -->
+            <AuthorizeView Roles="Manager">
+                @if (_request.Status == "PendingManagerApproval")
+                {
+                    <MudCard Class="mb-4">
+                        <MudCardHeader><MudText Typo="Typo.h6">Manager Action</MudText></MudCardHeader>
+                        <MudCardContent>
+                            <MudTextField @bind-Value="_remarks" Label="Remarks (optional)" Variant="Variant.Outlined" Lines="2" />
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudButton Color="Color.Success" Variant="Variant.Filled"
+                                       OnClick="@(() => ManagerApprove())">Approve</MudButton>
+                            <MudButton Color="Color.Error" Variant="Variant.Outlined" Class="ml-2"
+                                       OnClick="@(() => ManagerReject())">Reject</MudButton>
+                        </MudCardActions>
+                    </MudCard>
+                }
+            </AuthorizeView>
+
+            <AuthorizeView Roles="FinanceAdmin">
+                @if (_request.Status == "PendingFinanceReview")
+                {
+                    <MudCard Class="mb-4">
+                        <MudCardHeader><MudText Typo="Typo.h6">Finance Action</MudText></MudCardHeader>
+                        <MudCardContent>
+                            <MudTextField @bind-Value="_remarks" Label="Remarks (optional)" Variant="Variant.Outlined" Lines="2" />
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudButton Color="Color.Success" Variant="Variant.Filled"
+                                       OnClick="@(() => FinanceApprove())">Approve</MudButton>
+                            <MudButton Color="Color.Error" Variant="Variant.Outlined" Class="ml-2"
+                                       OnClick="@(() => FinanceReject())">Reject</MudButton>
+                        </MudCardActions>
+                    </MudCard>
+                }
+            </AuthorizeView>
+
+            <AuthorizeView Roles="Requestor">
+                @if (_request.Status is "Draft" or "PendingManagerApproval")
+                {
+                    <MudButton Color="Color.Error" Variant="Variant.Outlined" Class="mb-4"
+                               OnClick="CancelRequest">Cancel Request</MudButton>
+                }
+            </AuthorizeView>
+        </MudItem>
+
+        <MudItem xs="12" md="4">
+            <MudCard Elevation="1">
+                <MudCardHeader><MudText Typo="Typo.subtitle1" Style="font-weight:600;">Workflow History</MudText></MudCardHeader>
+                <MudCardContent>
+                    @if (!_request.WorkflowHistory.Any())
+                    {
+                        <div class="d-flex flex-column align-center pa-4">
+                            <MudIcon Icon="@Icons.Material.Filled.History" Style="font-size:2rem; color:#CBD5E1;" />
+                            <MudText Typo="Typo.body2" Style="color:#94A3B8; margin-top:0.5rem;">No history yet.</MudText>
+                        </div>
+                    }
+                    else
+                    {
+                        @foreach (var h in _request.WorkflowHistory.OrderBy(x => x.Timestamp))
+                        {
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <MudText Typo="Typo.caption" Style="color:#64748B;">@h.Timestamp.ToString("dd MMM yyyy HH:mm")</MudText>
+                                <MudText Typo="Typo.body2" Style="font-weight:600;">@h.ActionByName</MudText>
+                                <MudText Typo="Typo.caption">
+                                    <span class="status-badge @StatusClass(h.PreviousStatus)" style="font-size:0.65rem;">@StatusLabel(h.PreviousStatus)</span>
+                                    <MudIcon Icon="@Icons.Material.Filled.ArrowForward" Style="font-size:0.75rem; vertical-align:middle; color:#94A3B8;" />
+                                    <span class="status-badge @StatusClass(h.NewStatus)" style="font-size:0.65rem;">@StatusLabel(h.NewStatus)</span>
+                                </MudText>
+                                @if (!string.IsNullOrEmpty(h.Remarks))
+                                {
+                                    <MudText Typo="Typo.caption" Style="color:#64748B; font-style:italic;">"@h.Remarks"</MudText>
+                                }
+                            </div>
+                        }
+                    }
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+}
+
+@code {
+    [Parameter] public string Id { get; set; } = "";
+    SponsorshipRequestDto? _request;
+    string? _remarks;
+
+    protected override async Task OnInitializedAsync() => await LoadAsync();
+
+    async Task LoadAsync() => _request = await Api.GetRequestByIdAsync(Id);
+
+    async Task ManagerApprove()
+    {
+        if (await Api.ManagerApproveAsync(Id, _remarks))
+        { Snackbar.Add("Approved.", Severity.Success); await LoadAsync(); }
+        else Snackbar.Add("Action failed.", Severity.Error);
+    }
+
+    async Task ManagerReject()
+    {
+        if (await Api.ManagerRejectAsync(Id, _remarks))
+        { Snackbar.Add("Rejected.", Severity.Success); await LoadAsync(); }
+        else Snackbar.Add("Action failed.", Severity.Error);
+    }
+
+    async Task FinanceApprove()
+    {
+        if (await Api.FinanceApproveAsync(Id, _remarks))
+        { Snackbar.Add("Approved.", Severity.Success); await LoadAsync(); }
+        else Snackbar.Add("Action failed.", Severity.Error);
+    }
+
+    async Task FinanceReject()
+    {
+        if (await Api.FinanceRejectAsync(Id, _remarks))
+        { Snackbar.Add("Rejected.", Severity.Success); await LoadAsync(); }
+        else Snackbar.Add("Action failed.", Severity.Error);
+    }
+
+    async Task CancelRequest()
+    {
+        if (await Api.CancelRequestAsync(Id, null))
+        { Snackbar.Add("Request cancelled.", Severity.Info); Nav.NavigateTo("/requests"); }
+        else Snackbar.Add("Cancel failed.", Severity.Error);
+    }
+
+    string StatusClass(string status) => status switch
+    {
+        "Draft" => "status-draft",
+        "PendingManagerApproval" or "PendingFinanceReview" => "status-pending",
+        "Approved" => "status-approved",
+        "Rejected" => "status-rejected",
+        "Cancelled" => "status-cancelled",
+        _ => "status-draft"
+    };
+
+    string StatusLabel(string status) => status switch
+    {
+        "PendingManagerApproval" => "Pending Approval",
+        "PendingFinanceReview" => "Finance Review",
+        _ => status
+    };
+}

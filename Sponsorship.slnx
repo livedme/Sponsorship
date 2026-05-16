@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Sponsorship.API/Sponsorship.API.csproj" />
+    <Project Path="src/Sponsorship.Application/Sponsorship.Application.csproj" />
+    <Project Path="src/Sponsorship.BlazorUI/Sponsorship.BlazorUI.csproj" />
+    <Project Path="src/Sponsorship.Domain/Sponsorship.Domain.csproj" />
+    <Project Path="src/Sponsorship.Infrastructure/Sponsorship.Infrastructure.csproj" />
+  </Folder>
+</Solution>

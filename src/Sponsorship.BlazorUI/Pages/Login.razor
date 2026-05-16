@@ -1,0 +1,97 @@
+@page "/login"
+@inject ApiService Api
+@inject CustomAuthStateProvider AuthProvider
+@inject NavigationManager Nav
+
+<PageTitle>Login – Sponsorship Portal</PageTitle>
+
+<MudGrid Style="min-height:100vh; margin:0;margin-top:-80px;" Spacing="0">
+    <!-- Brand panel (left) -->
+    <MudItem xs="0" sm="5" Class="login-brand d-none d-sm-flex">
+        <MudIcon Icon="@Icons.Material.Filled.VolunteerActivism" Style="font-size:3rem; color:rgba(255,255,255,0.9); margin-bottom:1.5rem;" />
+        <MudText Typo="Typo.h4" Style="color:white; font-weight:700; line-height:1.2; margin-bottom:1rem;">
+            SponsorHub
+        </MudText>
+        <MudText Typo="Typo.body1" Style="color:rgba(255,255,255,0.7); max-width:320px; line-height:1.6;">
+            Streamline your sponsorship requests — from submission to approval in one unified portal.
+        </MudText>
+        <MudDivider Style="border-color:rgba(255,255,255,0.2); margin:2rem 0; width:60px;" />
+        <MudText Typo="Typo.caption" Style="color:rgba(255,255,255,0.4);">
+            Sponsorship Request Management System
+        </MudText>
+    </MudItem>
+
+    <!-- Form panel (right) -->
+    <MudItem xs="12" sm="7" Class="login-form-panel">
+        <MudPaper Elevation="0" Style="width:100%; max-width:400px; background:transparent;">
+            <MudText Typo="Typo.h5" Style="font-weight:700; color:#0F172A; margin-bottom:0.25rem;">
+                Welcome back
+            </MudText>
+            <MudText Typo="Typo.body2" Style="color:#64748B; margin-bottom:2rem;">
+                Sign in to your account
+            </MudText>
+
+            @if (_error != null)
+            {
+                <MudAlert Severity="Severity.Error" Class="mb-4" Dense="true">@_error</MudAlert>
+            }
+
+            <MudTextField @bind-Value="_email" Label="Email address" InputType="InputType.Email"
+                          Variant="Variant.Outlined" FullWidth="true" Class="mb-3"
+                          Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Email" />
+
+            <MudTextField @bind-Value="_password" Label="Password" InputType="InputType.Password"
+                          Variant="Variant.Outlined" FullWidth="true" Class="mb-5"
+                          Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Lock" />
+
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Size="Size.Large"
+                       OnClick="HandleLogin" Disabled="_loading" Style="height:48px; font-weight:600;">
+                @if (_loading)
+                {
+                    <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" />
+                    <span>Signing in...</span>
+                }
+                else
+                {
+                    <span>Sign In</span>
+                }
+            </MudButton>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+@code {
+    string _email = "";
+    string _password = "";
+    string? _error;
+    bool _loading;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var state = await AuthProvider.GetAuthenticationStateAsync();
+        if (state.User.Identity?.IsAuthenticated == true)
+            Nav.NavigateTo("/");
+    }
+
+    async Task HandleLogin()
+    {
+        _error = null;
+        _loading = true;
+        try
+        {
+            var result = await Api.LoginAsync(new LoginRequest { Email = _email, Password = _password });
+            if (result == null)
+            {
+                _error = "Invalid email or password.";
+                return;
+            }
+            await AuthProvider.NotifyLoginAsync(result.Token);
+            Nav.NavigateTo("/");
+        }
+        catch (Exception ex)
+        {
+            _error = "Login failed: " + ex.Message;
+        }
+        finally { _loading = false; }
+    }
+}

@@ -1,0 +1,47 @@
+@page "/manager"
+@attribute [Authorize(Roles = "Manager")]
+@inject ApiService Api
+
+<PageTitle>Manager – Pending Approvals</PageTitle>
+
+<div class="page-header d-flex align-center justify-space-between">
+    <div>
+        <MudText Typo="Typo.h5" Style="font-weight:700; color:white; margin:0;">Pending Approvals</MudText>
+        <MudText Typo="Typo.body2" Style="color:rgba(255,255,255,0.75); margin:0;">Review and action sponsorship requests</MudText>
+    </div>
+    <MudIcon Icon="@Icons.Material.Filled.Approval" Style="font-size:2rem; color:rgba(255,255,255,0.4);" />
+</div>
+
+@if (_requests == null)
+{
+    <MudProgressLinear Indeterminate="true" Color="Color.Primary" Class="mb-4" />
+}
+else
+{
+    var pending = _requests.Where(r => r.Status == "PendingManagerApproval").ToList();
+    var others = _requests.Where(r => r.Status != "PendingManagerApproval").ToList();
+
+    <MudPaper Elevation="1" Class="pa-4 mb-4">
+        <div class="d-flex align-center gap-2 mb-3">
+            <MudText Typo="Typo.subtitle1" Style="font-weight:600;">Awaiting Your Action</MudText>
+            @if (pending.Count > 0)
+            {
+                <MudBadge Content="@pending.Count" Color="Color.Warning" Overlap="false">
+                    <MudIcon Icon="@Icons.Material.Filled.Notifications" Size="Size.Small" Color="Color.Warning" />
+                </MudBadge>
+            }
+        </div>
+        <RequestsTable Requests="pending" />
+    </MudPaper>
+
+    <MudPaper Elevation="1" Class="pa-4">
+        <MudText Typo="Typo.subtitle1" Style="font-weight:600;" Class="mb-3">Previously Actioned</MudText>
+        <RequestsTable Requests="others" />
+    </MudPaper>
+}
+
+@code {
+    List<SponsorshipRequestDto>? _requests;
+    protected override async Task OnInitializedAsync()
+        => _requests = await Api.GetMyRequestsAsync();
+}

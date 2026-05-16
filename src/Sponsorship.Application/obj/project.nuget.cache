@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "vjIeKQWCS14=",
+  "success": true,
+  "projectFilePath": "F:\\Microskill\\Singapur\\src\\Sponsorship.Application\\Sponsorship.Application.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Aminul\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\10.0.8\\microsoft.extensions.dependencyinjection.abstractions.10.0.8.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -1,0 +1,15 @@
+F:\Microskill\Singapur\src\Sponsorship.Application\bin\Debug\net8.0\Sponsorship.Application.deps.json
+F:\Microskill\Singapur\src\Sponsorship.Application\bin\Debug\net8.0\Sponsorship.Application.dll
+F:\Microskill\Singapur\src\Sponsorship.Application\bin\Debug\net8.0\Sponsorship.Application.pdb
+F:\Microskill\Singapur\src\Sponsorship.Application\bin\Debug\net8.0\Sponsorship.Domain.dll
+F:\Microskill\Singapur\src\Sponsorship.Application\bin\Debug\net8.0\Sponsorship.Domain.pdb
+F:\Microskill\Singapur\src\Sponsorship.Application\obj\Debug\net8.0\Sponsorship.Application.csproj.AssemblyReference.cache
+F:\Microskill\Singapur\src\Sponsorship.Application\obj\Debug\net8.0\Sponsorship.Application.GeneratedMSBuildEditorConfig.editorconfig
+F:\Microskill\Singapur\src\Sponsorship.Application\obj\Debug\net8.0\Sponsorship.Application.AssemblyInfoInputs.cache
+F:\Microskill\Singapur\src\Sponsorship.Application\obj\Debug\net8.0\Sponsorship.Application.AssemblyInfo.cs
+F:\Microskill\Singapur\src\Sponsorship.Application\obj\Debug\net8.0\Sponsorship.Application.csproj.CoreCompileInputs.cache
+F:\Microskill\Singapur\src\Sponsorship.Application\obj\Debug\net8.0\Sponsors.5B749BAE.Up2Date
+F:\Microskill\Singapur\src\Sponsorship.Application\obj\Debug\net8.0\Sponsorship.Application.dll
+F:\Microskill\Singapur\src\Sponsorship.Application\obj\Debug\net8.0\refint\Sponsorship.Application.dll
+F:\Microskill\Singapur\src\Sponsorship.Application\obj\Debug\net8.0\Sponsorship.Application.pdb
+F:\Microskill\Singapur\src\Sponsorship.Application\obj\Debug\net8.0\ref\Sponsorship.Application.dll

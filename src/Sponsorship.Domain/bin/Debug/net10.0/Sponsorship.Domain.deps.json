@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "Sponsorship.Domain/1.0.0": {
+        "runtime": {
+          "Sponsorship.Domain.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Sponsorship.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

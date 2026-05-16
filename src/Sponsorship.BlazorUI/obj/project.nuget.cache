@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "EQ7hR2VBrh0=",
+  "success": true,
+  "projectFilePath": "F:\\Microskill\\Singapur\\src\\Sponsorship.BlazorUI\\Sponsorship.BlazorUI.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Aminul\\.nuget\\packages\\microsoft.aspnetcore.app.internal.assets\\10.0.8\\microsoft.aspnetcore.app.internal.assets.10.0.8.nupkg.sha512",
+    "C:\\Users\\Aminul\\.nuget\\packages\\microsoft.identitymodel.abstractions\\8.18.0\\microsoft.identitymodel.abstractions.8.18.0.nupkg.sha512",
+    "C:\\Users\\Aminul\\.nuget\\packages\\microsoft.identitymodel.jsonwebtokens\\8.18.0\\microsoft.identitymodel.jsonwebtokens.8.18.0.nupkg.sha512",
+    "C:\\Users\\Aminul\\.nuget\\packages\\microsoft.identitymodel.logging\\8.18.0\\microsoft.identitymodel.logging.8.18.0.nupkg.sha512",
+    "C:\\Users\\Aminul\\.nuget\\packages\\microsoft.identitymodel.tokens\\8.18.0\\microsoft.identitymodel.tokens.8.18.0.nupkg.sha512",
+    "C:\\Users\\Aminul\\.nuget\\packages\\mudblazor\\9.4.0\\mudblazor.9.4.0.nupkg.sha512",
+    "C:\\Users\\Aminul\\.nuget\\packages\\system.identitymodel.tokens.jwt\\8.18.0\\system.identitymodel.tokens.jwt.8.18.0.nupkg.sha512"
+  ],
+  "logs": []
+}

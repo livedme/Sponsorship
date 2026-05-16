@@ -1,0 +1,76 @@
+@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+    font-family: 'Inter', 'Roboto', sans-serif;
+    background-color: #F1F5F9;
+    color: #0F172A;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1:focus { outline: none; }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+.mud-nav-link.active { background: rgba(37,99,235,0.12) !important; color: #2563EB !important; border-left: 3px solid #2563EB; }
+.mud-nav-link { border-left: 3px solid transparent; transition: background .15s, color .15s; border-radius: 0 6px 6px 0 !important; margin: 2px 8px 2px 0; }
+.mud-nav-link:hover { background: rgba(148,163,184,0.12) !important; }
+
+.stat-card { border-top: 4px solid var(--accent-color, #2563EB); transition: transform .15s, box-shadow .15s; }
+.stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(15,23,42,.1) !important; }
+
+.login-brand { background: linear-gradient(135deg, #0F172A 0%, #1E3A5F 50%, #2563EB 100%); min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: 3rem; }
+.login-form-panel { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #F8FAFC; padding: 2rem; }
+
+.page-header { background: linear-gradient(90deg, #2563EB 0%, #7C3AED 100%); border-radius: 12px; padding: 1.25rem 1.75rem; margin-top: 0; margin-bottom: 1.5rem; color: white; }
+
+.status-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 9999px; font-size: 0.72rem; font-weight: 600; letter-spacing: .02em; }
+.status-draft { background: #F1F5F9; color: #64748B; border: 1px solid #CBD5E1; }
+.status-pending { background: #FEF3C7; color: #92400E; border: 1px solid #FCD34D; }
+.status-approved { background: #D1FAE5; color: #065F46; border: 1px solid #6EE7B7; }
+.status-rejected { background: #FEE2E2; color: #991B1B; border: 1px solid #FCA5A5; }
+.status-cancelled { background: #F1F5F9; color: #374151; border: 1px solid #D1D5DB; }
+
+.timeline-item { position: relative; padding-left: 2rem; padding-bottom: 1.25rem; }
+.timeline-item::before { content: ''; position: absolute; left: 7px; top: 22px; bottom: 0; width: 2px; background: #E2E8F0; }
+.timeline-item:last-child::before { display: none; }
+.timeline-dot { position: absolute; left: 0; top: 4px; width: 16px; height: 16px; border-radius: 50%; background: #2563EB; border: 2px solid #DBEAFE; }
+
+.hover-card { transition: box-shadow .15s, transform .15s; }
+.hover-card:hover { box-shadow: 0 8px 24px rgba(15,23,42,.1) !important; transform: translateY(-1px); }
+
+.app-brand { font-size: 1rem; font-weight: 700; letter-spacing: -.01em; color: #F1F5F9; }
+.drawer-logo { padding: 1.25rem 1rem 0.75rem; border-bottom: 1px solid rgba(148,163,184,.12); margin-bottom: 0.5rem; }
+.nav-section-label { font-size: 0.65rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #64748B; padding: 0.75rem 1rem 0.25rem; }
+.form-section-title { font-size: 0.75rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #64748B; border-bottom: 1px solid #E2E8F0; padding-bottom: 0.4rem; margin-bottom: 0.75rem; }
+
+#blazor-error-ui { background: #FEF3C7; border-top: 2px solid #F59E0B; bottom: 0; display: none; left: 0; padding: 0.75rem 1.5rem; position: fixed; width: 100%; z-index: 1000; color: #92400E; font-size: 0.875rem; }
+#blazor-error-ui .dismiss { cursor: pointer; position: absolute; right: 1rem; top: 0.75rem; }
+.blazor-error-boundary { background: #FEE2E2; border-left: 4px solid #EF4444; padding: 1rem 1.5rem; color: #991B1B; border-radius: 8px; }
+.blazor-error-boundary::after { content: "An error has occurred." }
+
+.valid.modified:not([type=checkbox]) { outline: 1px solid #10B981; }
+.invalid { outline: 1px solid #EF4444; }
+.validation-message { color: #EF4444; font-size: 0.75rem; }
+
+aside {
+    margin-top: -17px;
+}
+
+@media (min-width: 960px) {
+    .mud-drawer-open-responsive-md-left .mud-main-content {
+        margin-left: var(--mud-drawer-width-left);
+        margin-top: 17px;
+    }
+}
+@media (min-width: 600px) {
+    .mud-main-content {
+        padding-top: var(--mud-appbar-height);
+        margin-top: 17px;
+    }
+} 

@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "src\\Sponsorship.API\\Sponsorship.API.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "src\\Sponsorship.BlazorUI\\Sponsorship.BlazorUI.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

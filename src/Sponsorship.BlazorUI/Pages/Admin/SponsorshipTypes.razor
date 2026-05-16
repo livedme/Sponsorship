@@ -1,0 +1,89 @@
+@page "/admin/types"
+@attribute [Authorize(Roles = "SystemAdmin")]
+@inject ApiService Api
+@inject ISnackbar Snackbar
+@inject IDialogService Dialog
+
+<PageTitle>Admin – Sponsorship Types</PageTitle>
+<MudText Typo="Typo.h5" Class="mb-4">Sponsorship Types</MudText>
+
+<MudCard Class="mb-4">
+    <MudCardHeader><MudText Typo="Typo.h6">Add New Type</MudText></MudCardHeader>
+    <MudCardContent>
+        <MudTextField @bind-Value="_newName" Label="Type Name" Variant="Variant.Outlined" />
+    </MudCardContent>
+    <MudCardActions>
+        <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="AddType">Add</MudButton>
+    </MudCardActions>
+</MudCard>
+
+@if (_types == null) { <MudProgressCircular Indeterminate="true" /> }
+else
+{
+    <MudTable Items="_types" Hover="true" Dense="true">
+        <HeaderContent>
+            <MudTh>ID</MudTh>
+            <MudTh>Name</MudTh>
+            <MudTh>Actions</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.Id</MudTd>
+            <MudTd>
+                @if (_editingId == context.Id)
+                {
+                    <MudTextField @bind-Value="_editName" Variant="Variant.Outlined" Dense="true" />
+                }
+                else { @context.Name }
+            </MudTd>
+            <MudTd>
+                @if (_editingId == context.Id)
+                {
+                    <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Success"
+                                   OnClick="@(() => SaveEdit(context.Id))" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Cancel"
+                                   OnClick="@(() => _editingId = null)" />
+                }
+                else
+                {
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit"
+                                   OnClick="@(() => { _editingId = context.Id; _editName = context.Name; })" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error"
+                                   OnClick="@(() => DeleteType(context.Id))" />
+                }
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+
+@code {
+    List<SponsorshipTypeDto>? _types;
+    string _newName = "";
+    int? _editingId;
+    string _editName = "";
+
+    protected override async Task OnInitializedAsync() => await LoadAsync();
+    async Task LoadAsync() => _types = await Api.AdminGetSponsorshipTypesAsync();
+
+    async Task AddType()
+    {
+        if (string.IsNullOrWhiteSpace(_newName)) return;
+        var result = await Api.AdminCreateSponsorshipTypeAsync(new CreateSponsorshipTypeDto { Name = _newName });
+        if (result != null) { _newName = ""; Snackbar.Add("Type added.", Severity.Success); await LoadAsync(); }
+        else Snackbar.Add("Failed to add type.", Severity.Error);
+    }
+
+    async Task SaveEdit(int id)
+    {
+        if (string.IsNullOrWhiteSpace(_editName)) return;
+        if (await Api.AdminUpdateSponsorshipTypeAsync(id, new CreateSponsorshipTypeDto { Name = _editName }))
+        { _editingId = null; Snackbar.Add("Updated.", Severity.Success); await LoadAsync(); }
+        else Snackbar.Add("Update failed.", Severity.Error);
+    }
+
+    async Task DeleteType(int id)
+    {
+        if (await Api.AdminDeleteSponsorshipTypeAsync(id))
+        { Snackbar.Add("Deleted.", Severity.Success); await LoadAsync(); }
+        else Snackbar.Add("Delete failed.", Severity.Error);
+    }
+}

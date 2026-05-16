@@ -1,0 +1,33 @@
+@page "/admin/audit"
+@attribute [Authorize(Roles = "SystemAdmin")]
+@inject ApiService Api
+
+<PageTitle>Admin – Audit Log</PageTitle>
+<MudText Typo="Typo.h5" Class="mb-4">Workflow Audit Log</MudText>
+
+@if (_history == null) { <MudProgressCircular Indeterminate="true" /> }
+else
+{
+    <MudTable Items="_history" Hover="true" Dense="true" Striped="true">
+        <HeaderContent>
+            <MudTh>Time</MudTh>
+            <MudTh>By</MudTh>
+            <MudTh>From</MudTh>
+            <MudTh>To</MudTh>
+            <MudTh>Remarks</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.Timestamp.ToString("dd MMM yyyy HH:mm")</MudTd>
+            <MudTd>@context.ActionByName</MudTd>
+            <MudTd>@context.PreviousStatus</MudTd>
+            <MudTd>@context.NewStatus</MudTd>
+            <MudTd>@context.Remarks</MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+
+@code {
+    List<WorkflowHistoryDto>? _history;
+    protected override async Task OnInitializedAsync()
+        => _history = await Api.AdminGetWorkflowHistoryAsync();
+}

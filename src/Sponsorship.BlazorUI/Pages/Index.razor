@@ -1,0 +1,112 @@
+﻿@page "/"
+@attribute [Authorize]
+@inject ApiService Api
+@inject NavigationManager Nav
+@using System.Security.Claims
+
+<PageTitle>Dashboard – Sponsorship Portal</PageTitle>
+
+<AuthorizeView>
+    <Authorized>
+        <!-- Page header -->
+        <div class="page-header d-flex align-center justify-space-between">
+            <div>
+                <MudText Typo="Typo.h5" Style="font-weight:700; color:white; margin:0;">Dashboard</MudText>
+                <MudText Typo="Typo.body2" Style="color:rgba(255,255,255,0.75); margin:0;">
+                    Welcome back, @context.User.FindFirst("name")?.Value
+                </MudText>
+            </div>
+            <MudIcon Icon="@Icons.Material.Filled.SpaceDashboard" Style="font-size:2rem; color:rgba(255,255,255,0.4);" />
+        </div>
+
+        @if (_requests == null)
+        {
+            <MudProgressLinear Indeterminate="true" Color="Color.Primary" Class="mb-4" />
+        }
+        else
+        {
+            <!-- Stat cards -->
+            <MudGrid Class="mb-6">
+                <MudItem xs="12" sm="6" md="3">
+                    <MudPaper Class="pa-4 stat-card hover-card" Elevation="1" Style="--accent-color:#3B82F6;">
+                        <div class="d-flex align-center justify-space-between mb-2">
+                            <MudText Typo="Typo.overline" Style="color:#64748B; font-weight:600;">Total Requests</MudText>
+                            <MudAvatar Style="background:#EFF6FF; color:#3B82F6; width:36px; height:36px;">
+                                <MudIcon Icon="@Icons.Material.Filled.Folder" Size="Size.Small" />
+                            </MudAvatar>
+                        </div>
+                        <MudText Typo="Typo.h4" Style="font-weight:700; color:#0F172A;">@_requests.Count</MudText>
+                        <MudText Typo="Typo.caption" Style="color:#94A3B8;">All time</MudText>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="12" sm="6" md="3">
+                    <MudPaper Class="pa-4 stat-card hover-card" Elevation="1" Style="--accent-color:#F59E0B;">
+                        <div class="d-flex align-center justify-space-between mb-2">
+                            <MudText Typo="Typo.overline" Style="color:#64748B; font-weight:600;">Pending</MudText>
+                            <MudAvatar Style="background:#FFFBEB; color:#F59E0B; width:36px; height:36px;">
+                                <MudIcon Icon="@Icons.Material.Filled.HourglassEmpty" Size="Size.Small" />
+                            </MudAvatar>
+                        </div>
+                        <MudText Typo="Typo.h4" Style="font-weight:700; color:#0F172A;">
+                            @_requests.Count(r => r.Status is "PendingManagerApproval" or "PendingFinanceReview")
+                        </MudText>
+                        <MudText Typo="Typo.caption" Style="color:#94A3B8;">Awaiting review</MudText>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="12" sm="6" md="3">
+                    <MudPaper Class="pa-4 stat-card hover-card" Elevation="1" Style="--accent-color:#10B981;">
+                        <div class="d-flex align-center justify-space-between mb-2">
+                            <MudText Typo="Typo.overline" Style="color:#64748B; font-weight:600;">Approved</MudText>
+                            <MudAvatar Style="background:#ECFDF5; color:#10B981; width:36px; height:36px;">
+                                <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Size="Size.Small" />
+                            </MudAvatar>
+                        </div>
+                        <MudText Typo="Typo.h4" Style="font-weight:700; color:#0F172A;">
+                            @_requests.Count(r => r.Status == "Approved")
+                        </MudText>
+                        <MudText Typo="Typo.caption" Style="color:#94A3B8;">Successfully approved</MudText>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="12" sm="6" md="3">
+                    <MudPaper Class="pa-4 stat-card hover-card" Elevation="1" Style="--accent-color:#EF4444;">
+                        <div class="d-flex align-center justify-space-between mb-2">
+                            <MudText Typo="Typo.overline" Style="color:#64748B; font-weight:600;">Rejected</MudText>
+                            <MudAvatar Style="background:#FEF2F2; color:#EF4444; width:36px; height:36px;">
+                                <MudIcon Icon="@Icons.Material.Filled.Cancel" Size="Size.Small" />
+                            </MudAvatar>
+                        </div>
+                        <MudText Typo="Typo.h4" Style="font-weight:700; color:#0F172A;">
+                            @_requests.Count(r => r.Status == "Rejected")
+                        </MudText>
+                        <MudText Typo="Typo.caption" Style="color:#94A3B8;">Not approved</MudText>
+                    </MudPaper>
+                </MudItem>
+            </MudGrid>
+
+            <!-- Recent requests -->
+            <MudPaper Elevation="1" Class="pa-4">
+                <div class="d-flex align-center justify-space-between mb-3">
+                    <MudText Typo="Typo.subtitle1" Style="font-weight:600;">Recent Requests</MudText>
+                    <MudChip T="string" Size="Size.Small" Color="Color.Primary" Variant="Variant.Outlined">Last 5</MudChip>
+                </div>
+                <RequestsTable Requests="_requests.OrderByDescending(r => r.CreatedAt).Take(5).ToList()" />
+            </MudPaper>
+        }
+    </Authorized>
+</AuthorizeView>
+
+@code {
+    List<SponsorshipRequestDto>? _requests;
+
+    [CascadingParameter] Task<AuthenticationState>? AuthState { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var state = await AuthState!;
+        var role = state.User.FindFirst(ClaimTypes.Role)?.Value;
+
+        _requests = role == "SystemAdmin"
+            ? await Api.AdminGetAllRequestsAsync()
+            : await Api.GetMyRequestsAsync();
+    }
+}

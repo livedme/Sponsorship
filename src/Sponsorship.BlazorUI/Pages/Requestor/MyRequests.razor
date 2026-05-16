@@ -1,0 +1,37 @@
+@page "/requests"
+@attribute [Authorize(Roles = "Requestor")]
+@inject ApiService Api
+
+<PageTitle>My Requests</PageTitle>
+
+<div class="page-header d-flex align-center justify-space-between">
+    <div>
+        <MudText Typo="Typo.h5" Style="font-weight:700; color:white; margin:0;">My Requests</MudText>
+        <MudText Typo="Typo.body2" Style="color:rgba(255,255,255,0.75); margin:0;">Track your sponsorship submissions</MudText>
+    </div>
+    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add"
+               Href="/requests/new"
+               Style="background:white; color:#2563EB; font-weight:600;">
+        New Request
+    </MudButton>
+</div>
+
+@if (_requests == null)
+{
+    <MudProgressLinear Indeterminate="true" Color="Color.Primary" Class="mb-4" />
+}
+else
+{
+    <MudPaper Elevation="1" Class="pa-4">
+        <RequestsTable Requests="_requests" />
+    </MudPaper>
+}
+
+@code {
+    List<SponsorshipRequestDto>? _requests;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _requests = await Api.GetMyRequestsAsync();
+    }
+}
