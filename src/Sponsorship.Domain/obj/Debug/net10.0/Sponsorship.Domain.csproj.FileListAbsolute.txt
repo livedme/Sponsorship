@@ -9,3 +9,15 @@ F:\Microskill\Singapur\src\Sponsorship.Domain\obj\Debug\net10.0\Sponsorship.Doma
 F:\Microskill\Singapur\src\Sponsorship.Domain\obj\Debug\net10.0\refint\Sponsorship.Domain.dll
 F:\Microskill\Singapur\src\Sponsorship.Domain\obj\Debug\net10.0\Sponsorship.Domain.pdb
 F:\Microskill\Singapur\src\Sponsorship.Domain\obj\Debug\net10.0\ref\Sponsorship.Domain.dll
+F:\Microskill\Sponsorship\src\Sponsorship.Domain\obj\Debug\net10.0\Sponsorship.Domain.GeneratedMSBuildEditorConfig.editorconfig
+F:\Microskill\Sponsorship\src\Sponsorship.Domain\obj\Debug\net10.0\Sponsorship.Domain.AssemblyInfoInputs.cache
+F:\Microskill\Sponsorship\src\Sponsorship.Domain\obj\Debug\net10.0\Sponsorship.Domain.AssemblyInfo.cs
+F:\Microskill\Sponsorship\src\Sponsorship.Domain\obj\Debug\net10.0\Sponsorship.Domain.csproj.CoreCompileInputs.cache
+F:\Microskill\Sponsorship\src\Sponsorship.Domain\obj\Debug\net10.0\Sponsorship.Domain.sourcelink.json
+F:\Microskill\Sponsorship\src\Sponsorship.Domain\obj\Debug\net10.0\Sponsorship.Domain.dll
+F:\Microskill\Sponsorship\src\Sponsorship.Domain\obj\Debug\net10.0\refint\Sponsorship.Domain.dll
+F:\Microskill\Sponsorship\src\Sponsorship.Domain\obj\Debug\net10.0\Sponsorship.Domain.pdb
+F:\Microskill\Sponsorship\src\Sponsorship.Domain\bin\Debug\net10.0\Sponsorship.Domain.deps.json
+F:\Microskill\Sponsorship\src\Sponsorship.Domain\bin\Debug\net10.0\Sponsorship.Domain.dll
+F:\Microskill\Sponsorship\src\Sponsorship.Domain\bin\Debug\net10.0\Sponsorship.Domain.pdb
+F:\Microskill\Sponsorship\src\Sponsorship.Domain\obj\Debug\net10.0\ref\Sponsorship.Domain.dll

@@ -5,23 +5,23 @@
 <MudLayout>
     <AuthorizeView>
         <Authorized>
-            <MudAppBar Elevation="0" Style="background:#0F172A; border-bottom:1px solid rgba(148,163,184,.1);">
-                <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
+            <MudAppBar Elevation="0" Style="background:#FFFFFF; border-bottom:1px solid #E2E8F0; color:#0F172A;">
+                <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Default" Edge="Edge.Start"
                                OnClick="@(() => _drawerOpen = !_drawerOpen)" />
                 <MudText Typo="Typo.subtitle1" Class="app-brand ml-1">Sponsorship Portal</MudText>
                 <MudSpacer />
-                <MudText Typo="Typo.caption" Style="color:#94A3B8" Class="mr-2">@context.User.FindFirst("name")?.Value</MudText>
+                <MudText Typo="Typo.caption" Style="color:#64748B" Class="mr-2">@context.User.FindFirst("name")?.Value</MudText>
                 <MudAvatar Style="background:#2563EB; color:white; width:32px; height:32px; font-size:0.8rem; margin-right:4px;">
                     @(context.User.FindFirst("name")?.Value?.Substring(0,1).ToUpper() ?? "U")
                 </MudAvatar>
                 <MudTooltip Text="Logout">
-                    <MudIconButton Icon="@Icons.Material.Filled.Logout" Color="Color.Inherit" OnClick="LogoutAsync" Size="Size.Small" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Logout" Color="Color.Default" OnClick="LogoutAsync" Size="Size.Small" />
                 </MudTooltip>
             </MudAppBar>
-            <MudDrawer @bind-Open="_drawerOpen" Elevation="0" Style="background:#0F172A; border-right:1px solid rgba(148,163,184,.08);">
+            <MudDrawer @bind-Open="_drawerOpen" Elevation="0" Style="background:#F8FAFC; border-right:1px solid #E2E8F0;">
                 <div class="drawer-logo d-flex align-center gap-2">
                     <MudIcon Icon="@Icons.Material.Filled.VolunteerActivism" Style="color:#2563EB" />
-                    <MudText Typo="Typo.subtitle2" Style="color:#F1F5F9; font-weight:700;">SponsorHub</MudText>
+                    <MudText Typo="Typo.subtitle2" Style="color:#0F172A; font-weight:700;">SponsorHub</MudText>
                 </div>
                 <NavMenu />
             </MudDrawer>

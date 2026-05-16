@@ -1,9 +1,10 @@
 namespace Sponsorship.Domain.Enums;
 
-public enum UserRole
+/// <summary>Role name constants that mirror the Identity roles seeded at startup.</summary>
+public static class Roles
 {
-    Requestor = 0,
-    Manager = 1,
-    FinanceAdmin = 2,
-    SystemAdmin = 3
+    public const string Requestor    = nameof(Requestor);
+    public const string Manager      = nameof(Manager);
+    public const string FinanceAdmin = nameof(FinanceAdmin);
+    public const string SystemAdmin  = nameof(SystemAdmin);
 }

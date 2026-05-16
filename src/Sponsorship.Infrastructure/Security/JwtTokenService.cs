@@ -12,21 +12,28 @@ namespace Sponsorship.Infrastructure.Security;
 public class JwtTokenService : ITokenService
 {
     private readonly JwtSettings _jwt;
+    private readonly IRoleService _roles;
 
-    public JwtTokenService(IOptions<JwtSettings> jwt) => _jwt = jwt.Value;
+    public JwtTokenService(IOptions<JwtSettings> jwt, IRoleService roles)
+    {
+        _jwt = jwt.Value;
+        _roles = roles;
+    }
 
-    public string GenerateToken(User user)
+    public async Task<string> GenerateToken(User user)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.Key));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        var claims = new[]
+        var claims = new List<Claim>
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.Name, user.FullName),
-            new Claim(ClaimTypes.Role, user.Role.ToString())
+            new Claim(ClaimTypes.Email, user.Email!),
+            new Claim(ClaimTypes.Name, user.FullName)
         };
+
+        var roles = await _roles.GetRolesAsync(user);
+        claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));
 
         var token = new JwtSecurityToken(
             issuer: _jwt.Issuer,

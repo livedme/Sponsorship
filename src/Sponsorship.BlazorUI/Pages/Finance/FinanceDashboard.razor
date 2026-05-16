@@ -19,7 +19,7 @@
 else
 {
     var pending = _requests.Where(r => r.Status == "PendingFinanceReview").ToList();
-    var others = _requests.Where(r => r.Status != "PendingFinanceReview").ToList();
+    var others = _requests.Where(r => r.Status == "Approved" || r.Status == "Rejected").ToList();
 
     <MudPaper Elevation="1" Class="pa-4 mb-4">
         <div class="d-flex align-center gap-2 mb-3">
@@ -35,7 +35,7 @@ else
     </MudPaper>
 
     <MudPaper Elevation="1" Class="pa-4">
-        <MudText Typo="Typo.subtitle1" Style="font-weight:600;" Class="mb-3">Completed</MudText>
+        <MudText Typo="Typo.subtitle1" Style="font-weight:600;" Class="mb-3">All Other Requests</MudText>
         <RequestsTable Requests="others" />
     </MudPaper>
 }

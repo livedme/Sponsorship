@@ -1,0 +1,97 @@
+@page "/requests/{Id}/edit"
+@attribute [Authorize(Roles = "Requestor")]
+@inject ApiService Api
+@inject NavigationManager Nav
+@inject ISnackbar Snackbar
+
+<PageTitle>Edit Draft Request</PageTitle>
+
+@if (_model == null)
+{
+    <MudProgressLinear Indeterminate="true" Color="Color.Primary" Class="mb-4" />
+}
+else
+{
+    <div class="page-header d-flex align-center justify-space-between mb-2">
+        <div>
+            <MudText Typo="Typo.h5" Style="font-weight:700; color:white; margin:0;">Edit Draft Request</MudText>
+            <MudText Typo="Typo.body2" Style="color:rgba(255,255,255,0.75); margin:0;">Update your draft and save or submit when ready</MudText>
+        </div>
+        <MudIconButton Icon="@Icons.Material.Filled.ArrowBack" Style="color:white;"
+                       OnClick="@(() => Nav.NavigateTo($"/requests/{Id}"))" />
+    </div>
+
+    <RequestForm Title="Edit Sponsorship Request"
+                 Model="_model"
+                 Types="_types"
+                 OnSubmit="HandleSubmit"
+                 OnSaveDraft="HandleSaveDraft" />
+}
+
+@code {
+    [Parameter] public string Id { get; set; } = "";
+
+    CreateSponsorshipRequestDto? _model;
+    List<SponsorshipTypeDto> _types = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var request = await Api.GetRequestByIdAsync(Id);
+        if (request == null || request.Status != "Draft")
+        {
+            Nav.NavigateTo("/requests");
+            return;
+        }
+
+        _types = await Api.GetSponsorshipTypesAsync();
+
+        _model = new CreateSponsorshipRequestDto
+        {
+            RequestTitle            = request.RequestTitle,
+            Department              = request.Department,
+            SponsorshipTypeId       = request.SponsorshipTypeId,
+            EventName               = request.EventName,
+            EventDate               = request.EventDate,
+            RequestedAmount         = request.RequestedAmount,
+            Purpose                 = request.Purpose,
+            ExpectedBusinessBenefit = request.ExpectedBusinessBenefit,
+            SupportingDocumentUrl   = request.SupportingDocumentUrl
+        };
+    }
+
+    async Task HandleSaveDraft(CreateSponsorshipRequestDto dto)
+    {
+        var result = await Api.UpdateRequestAsync(Id, ToUpdateDto(dto));
+        if (result == null) { Snackbar.Add($"Failed to save draft. {Api.LastError}", Severity.Error); return; }
+        Snackbar.Add("Draft saved.", Severity.Info);
+        Nav.NavigateTo("/requests");
+    }
+
+    async Task HandleSubmit(CreateSponsorshipRequestDto dto)
+    {
+        var saved = await Api.UpdateRequestAsync(Id, ToUpdateDto(dto));
+        if (saved == null) { Snackbar.Add($"Failed to update request. {Api.LastError}", Severity.Error); return; }
+
+        if (!await Api.SubmitRequestAsync(Id))
+        {
+            Snackbar.Add($"Failed to submit request. {Api.LastError}", Severity.Error);
+            return;
+        }
+
+        Snackbar.Add("Request submitted successfully!", Severity.Success);
+        Nav.NavigateTo("/requests");
+    }
+
+    static UpdateSponsorshipRequestDto ToUpdateDto(CreateSponsorshipRequestDto dto) => new()
+    {
+        RequestTitle            = dto.RequestTitle,
+        Department              = dto.Department,
+        SponsorshipTypeId       = dto.SponsorshipTypeId,
+        EventName               = dto.EventName,
+        EventDate               = dto.EventDate,
+        RequestedAmount         = dto.RequestedAmount,
+        Purpose                 = dto.Purpose,
+        ExpectedBusinessBenefit = dto.ExpectedBusinessBenefit,
+        SupportingDocumentUrl   = dto.SupportingDocumentUrl
+    };
+}

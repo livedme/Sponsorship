@@ -37,10 +37,8 @@ public class SponsorshipRequestRepository : ISponsorshipRequestRepository
 
         query = callerRole switch
         {
-            "Requestor"    => query.Where(r => r.RequestorId == callerId),
-            "Manager"      => query.Where(r => r.Status == RequestStatus.PendingManagerApproval),
-            "FinanceAdmin" => query.Where(r => r.Status == RequestStatus.PendingFinanceReview),
-            _              => query
+            "Requestor" => query.Where(r => r.RequestorId == callerId),
+            _           => query   // Manager, FinanceAdmin, SystemAdmin see all requests
         };
 
         return await query.OrderByDescending(r => r.UpdatedAt).ToListAsync();

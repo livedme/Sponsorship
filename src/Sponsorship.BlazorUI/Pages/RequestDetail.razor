@@ -87,7 +87,27 @@ else
             </AuthorizeView>
 
             <AuthorizeView Roles="Requestor">
-                @if (_request.Status is "Draft" or "PendingManagerApproval")
+                @if (_request.Status == "Draft")
+                {
+                    <MudCard Class="mb-4" Elevation="1">
+                        <MudCardHeader>
+                            <MudText Typo="Typo.subtitle1" Style="font-weight:600;">Draft Actions</MudText>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            <MudText Typo="Typo.body2" Style="color:#64748B;">
+                                This request is saved as a draft. Edit it and submit when ready.
+                            </MudText>
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudButton Color="Color.Primary" Variant="Variant.Filled"
+                                       StartIcon="@Icons.Material.Filled.Edit"
+                                       Href="@($"/requests/{Id}/edit")">Edit &amp; Submit</MudButton>
+                            @* <MudButton Color="Color.Error" Variant="Variant.Outlined" Class="ml-2"
+                                       OnClick="CancelRequest">Cancel Request</MudButton> *@
+                        </MudCardActions>
+                    </MudCard>
+                }
+                else if (_request.Status == "PendingManagerApproval")
                 {
                     <MudButton Color="Color.Error" Variant="Variant.Outlined" Class="mb-4"
                                OnClick="CancelRequest">Cancel Request</MudButton>

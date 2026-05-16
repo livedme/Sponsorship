@@ -14,19 +14,22 @@ public class SponsorshipRequestService : ISponsorshipRequestService
     private readonly IWorkflowHistoryRepository _history;
     private readonly IUserRepository _users;
     private readonly IUnitOfWork _uow;
+    private readonly IRoleService _roles;
 
     public SponsorshipRequestService(
         ISponsorshipRequestRepository requests,
         ISponsorshipTypeRepository types,
         IWorkflowHistoryRepository history,
         IUserRepository users,
-        IUnitOfWork uow)
+        IUnitOfWork uow,
+        IRoleService roles)
     {
         _requests = requests;
         _types = types;
         _history = history;
         _users = users;
         _uow = uow;
+        _roles = roles;
     }
 
     public async Task<SponsorshipRequestDto> CreateDraftAsync(CreateSponsorshipRequestDto dto, Guid requestorId)
@@ -118,7 +121,7 @@ public class SponsorshipRequestService : ISponsorshipRequestService
     public async Task<SponsorshipRequestDto> ManagerApproveAsync(Guid requestId, string? remarks, Guid managerId)
     {
         var (request, actor) = await LoadAsync(requestId, managerId);
-        if (actor.Role != UserRole.Manager)
+        if (!await _roles.IsInRoleAsync(actor, Roles.Manager))
             throw new ForbiddenException("Only Managers can perform this action.");
         if (request.Status != RequestStatus.PendingManagerApproval)
             throw new InvalidOperationException("Request is not pending manager approval.");
@@ -132,7 +135,7 @@ public class SponsorshipRequestService : ISponsorshipRequestService
     public async Task<SponsorshipRequestDto> ManagerRejectAsync(Guid requestId, string? remarks, Guid managerId)
     {
         var (request, actor) = await LoadAsync(requestId, managerId);
-        if (actor.Role != UserRole.Manager)
+        if (!await _roles.IsInRoleAsync(actor, Roles.Manager))
             throw new ForbiddenException("Only Managers can perform this action.");
         if (request.Status != RequestStatus.PendingManagerApproval)
             throw new InvalidOperationException("Request is not pending manager approval.");
@@ -146,7 +149,7 @@ public class SponsorshipRequestService : ISponsorshipRequestService
     public async Task<SponsorshipRequestDto> FinanceApproveAsync(Guid requestId, string? remarks, Guid financeId)
     {
         var (request, actor) = await LoadAsync(requestId, financeId);
-        if (actor.Role != UserRole.FinanceAdmin)
+        if (!await _roles.IsInRoleAsync(actor, Roles.FinanceAdmin))
             throw new ForbiddenException("Only Finance Admins can perform this action.");
         if (request.Status != RequestStatus.PendingFinanceReview)
             throw new InvalidOperationException("Request is not pending finance review.");
@@ -160,7 +163,7 @@ public class SponsorshipRequestService : ISponsorshipRequestService
     public async Task<SponsorshipRequestDto> FinanceRejectAsync(Guid requestId, string? remarks, Guid financeId)
     {
         var (request, actor) = await LoadAsync(requestId, financeId);
-        if (actor.Role != UserRole.FinanceAdmin)
+        if (!await _roles.IsInRoleAsync(actor, Roles.FinanceAdmin))
             throw new ForbiddenException("Only Finance Admins can perform this action.");
         if (request.Status != RequestStatus.PendingFinanceReview)
             throw new InvalidOperationException("Request is not pending finance review.");

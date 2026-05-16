@@ -25,78 +25,297 @@
         }
         else
         {
-            <!-- Stat cards -->
-            <MudGrid Class="mb-6">
-                <MudItem xs="12" sm="6" md="3">
-                    <MudPaper Class="pa-4 stat-card hover-card" Elevation="1" Style="--accent-color:#3B82F6;">
-                        <div class="d-flex align-center justify-space-between mb-2">
-                            <MudText Typo="Typo.overline" Style="color:#64748B; font-weight:600;">Total Requests</MudText>
-                            <MudAvatar Style="background:#EFF6FF; color:#3B82F6; width:36px; height:36px;">
-                                <MudIcon Icon="@Icons.Material.Filled.Folder" Size="Size.Small" />
-                            </MudAvatar>
-                        </div>
-                        <MudText Typo="Typo.h4" Style="font-weight:700; color:#0F172A;">@_requests.Count</MudText>
-                        <MudText Typo="Typo.caption" Style="color:#94A3B8;">All time</MudText>
-                    </MudPaper>
-                </MudItem>
-                <MudItem xs="12" sm="6" md="3">
-                    <MudPaper Class="pa-4 stat-card hover-card" Elevation="1" Style="--accent-color:#F59E0B;">
-                        <div class="d-flex align-center justify-space-between mb-2">
-                            <MudText Typo="Typo.overline" Style="color:#64748B; font-weight:600;">Pending</MudText>
-                            <MudAvatar Style="background:#FFFBEB; color:#F59E0B; width:36px; height:36px;">
-                                <MudIcon Icon="@Icons.Material.Filled.HourglassEmpty" Size="Size.Small" />
-                            </MudAvatar>
-                        </div>
-                        <MudText Typo="Typo.h4" Style="font-weight:700; color:#0F172A;">
-                            @_requests.Count(r => r.Status is "PendingManagerApproval" or "PendingFinanceReview")
-                        </MudText>
-                        <MudText Typo="Typo.caption" Style="color:#94A3B8;">Awaiting review</MudText>
-                    </MudPaper>
-                </MudItem>
-                <MudItem xs="12" sm="6" md="3">
-                    <MudPaper Class="pa-4 stat-card hover-card" Elevation="1" Style="--accent-color:#10B981;">
-                        <div class="d-flex align-center justify-space-between mb-2">
-                            <MudText Typo="Typo.overline" Style="color:#64748B; font-weight:600;">Approved</MudText>
-                            <MudAvatar Style="background:#ECFDF5; color:#10B981; width:36px; height:36px;">
-                                <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Size="Size.Small" />
-                            </MudAvatar>
-                        </div>
-                        <MudText Typo="Typo.h4" Style="font-weight:700; color:#0F172A;">
-                            @_requests.Count(r => r.Status == "Approved")
-                        </MudText>
-                        <MudText Typo="Typo.caption" Style="color:#94A3B8;">Successfully approved</MudText>
-                    </MudPaper>
-                </MudItem>
-                <MudItem xs="12" sm="6" md="3">
-                    <MudPaper Class="pa-4 stat-card hover-card" Elevation="1" Style="--accent-color:#EF4444;">
-                        <div class="d-flex align-center justify-space-between mb-2">
-                            <MudText Typo="Typo.overline" Style="color:#64748B; font-weight:600;">Rejected</MudText>
-                            <MudAvatar Style="background:#FEF2F2; color:#EF4444; width:36px; height:36px;">
-                                <MudIcon Icon="@Icons.Material.Filled.Cancel" Size="Size.Small" />
-                            </MudAvatar>
-                        </div>
-                        <MudText Typo="Typo.h4" Style="font-weight:700; color:#0F172A;">
-                            @_requests.Count(r => r.Status == "Rejected")
-                        </MudText>
-                        <MudText Typo="Typo.caption" Style="color:#94A3B8;">Not approved</MudText>
-                    </MudPaper>
-                </MudItem>
-            </MudGrid>
+            <!-- ── Requestor ───────────────────────────────────────────── -->
+            <AuthorizeView Roles="Requestor" Context="_r">
+                <MudGrid Class="mb-6">
+                    <MudItem xs="12" sm="6" md="3">
+                        <MudPaper Class="pa-4 stat-card hover-card" Elevation="1" Style="--accent-color:#3B82F6;">
+                            <div class="d-flex align-center justify-space-between mb-2">
+                                <MudText Typo="Typo.overline" Style="color:#64748B; font-weight:600;">My Requests</MudText>
+                                <MudAvatar Style="background:#EFF6FF; color:#3B82F6; width:36px; height:36px;">
+                                    <MudIcon Icon="@Icons.Material.Filled.Folder" Size="Size.Small" />
+                                </MudAvatar>
+                            </div>
+                            <MudText Typo="Typo.h4" Style="font-weight:700; color:#0F172A;">@_requests.Count</MudText>
+                            <MudText Typo="Typo.caption" Style="color:#94A3B8;">All time</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="3">
+                        <MudPaper Class="pa-4 stat-card hover-card" Elevation="1" Style="--accent-color:#F59E0B;">
+                            <div class="d-flex align-center justify-space-between mb-2">
+                                <MudText Typo="Typo.overline" Style="color:#64748B; font-weight:600;">Drafts</MudText>
+                                <MudAvatar Style="background:#FFFBEB; color:#F59E0B; width:36px; height:36px;">
+                                    <MudIcon Icon="@Icons.Material.Filled.EditNote" Size="Size.Small" />
+                                </MudAvatar>
+                            </div>
+                            <MudText Typo="Typo.h4" Style="font-weight:700; color:#0F172A;">@_requests.Count(r => r.Status == "Draft")</MudText>
+                            <MudText Typo="Typo.caption" Style="color:#94A3B8;">Not yet submitted</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="3">
+                        <MudPaper Class="pa-4 stat-card hover-card" Elevation="1" Style="--accent-color:#10B981;">
+                            <div class="d-flex align-center justify-space-between mb-2">
+                                <MudText Typo="Typo.overline" Style="color:#64748B; font-weight:600;">Approved</MudText>
+                                <MudAvatar Style="background:#ECFDF5; color:#10B981; width:36px; height:36px;">
+                                    <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Size="Size.Small" />
+                                </MudAvatar>
+                            </div>
+                            <MudText Typo="Typo.h4" Style="font-weight:700; color:#0F172A;">@_requests.Count(r => r.Status == "Approved")</MudText>
+                            <MudText Typo="Typo.caption" Style="color:#94A3B8;">Successfully approved</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="3">
+                        <MudPaper Class="pa-4 stat-card hover-card" Elevation="1" Style="--accent-color:#EF4444;">
+                            <div class="d-flex align-center justify-space-between mb-2">
+                                <MudText Typo="Typo.overline" Style="color:#64748B; font-weight:600;">Rejected</MudText>
+                                <MudAvatar Style="background:#FEF2F2; color:#EF4444; width:36px; height:36px;">
+                                    <MudIcon Icon="@Icons.Material.Filled.Cancel" Size="Size.Small" />
+                                </MudAvatar>
+                            </div>
+                            <MudText Typo="Typo.h4" Style="font-weight:700; color:#0F172A;">@_requests.Count(r => r.Status == "Rejected")</MudText>
+                            <MudText Typo="Typo.caption" Style="color:#94A3B8;">Not approved</MudText>
+                        </MudPaper>
+                    </MudItem>
+                </MudGrid>
+                <MudPaper Elevation="1" Class="pa-4">
+                    <div class="d-flex align-center justify-space-between mb-3">
+                        <MudText Typo="Typo.subtitle1" Style="font-weight:600;">My Recent Requests</MudText>
+                        <MudButton Size="Size.Small" Href="/requests" Variant="Variant.Text" Color="Color.Primary">View All</MudButton>
+                    </div>
+                    <RequestsTable Requests="_requests.OrderByDescending(r => r.CreatedAt).Take(5).ToList()" />
+                </MudPaper>
+            </AuthorizeView>
 
-            <!-- Recent requests -->
-            <MudPaper Elevation="1" Class="pa-4">
-                <div class="d-flex align-center justify-space-between mb-3">
-                    <MudText Typo="Typo.subtitle1" Style="font-weight:600;">Recent Requests</MudText>
-                    <MudChip T="string" Size="Size.Small" Color="Color.Primary" Variant="Variant.Outlined">Last 5</MudChip>
-                </div>
-                <RequestsTable Requests="_requests.OrderByDescending(r => r.CreatedAt).Take(5).ToList()" />
-            </MudPaper>
+            <!-- ── Manager ─────────────────────────────────────────────── -->
+            <AuthorizeView Roles="Manager" Context="_m">
+                @{
+                    var awatingApproval = _requests.Where(r => r.Status == "PendingManagerApproval").ToList();
+                    var approvedRejectedApproval = _requests.Where(r => r.Status == "Approved" || r.Status == "Rejected").ToList();
+                }
+                <MudGrid Class="mb-6">
+                    <MudItem xs="12" sm="6" md="3">
+                        <MudPaper Class="pa-4 stat-card hover-card" Elevation="1" Style="--accent-color:#3B82F6;">
+                            <div class="d-flex align-center justify-space-between mb-2">
+                                <MudText Typo="Typo.overline" Style="color:#64748B; font-weight:600;">Total Requests</MudText>
+                                <MudAvatar Style="background:#EFF6FF; color:#3B82F6; width:36px; height:36px;">
+                                    <MudIcon Icon="@Icons.Material.Filled.Folder" Size="Size.Small" />
+                                </MudAvatar>
+                            </div>
+                            <MudText Typo="Typo.h4" Style="font-weight:700; color:#0F172A;">@(awatingApproval.Count() + approvedRejectedApproval.Count())</MudText>
+                            <MudText Typo="Typo.caption" Style="color:#94A3B8;">Across all users</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="3">
+                        <MudPaper Class="pa-4 stat-card hover-card" Elevation="1" Style="--accent-color:#F59E0B;">
+                            <div class="d-flex align-center justify-space-between mb-2">
+                                <MudText Typo="Typo.overline" Style="color:#64748B; font-weight:600;">Awaiting Approval</MudText>
+                                <MudAvatar Style="background:#FFFBEB; color:#F59E0B; width:36px; height:36px;">
+                                    <MudIcon Icon="@Icons.Material.Filled.Approval" Size="Size.Small" />
+                                </MudAvatar>
+                            </div>
+                            <MudText Typo="Typo.h4" Style="font-weight:700; color:#0F172A;">@awatingApproval.Count()</MudText>
+                            <MudText Typo="Typo.caption" Style="color:#94A3B8;">Needs your action</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="3">
+                        <MudPaper Class="pa-4 stat-card hover-card" Elevation="1" Style="--accent-color:#10B981;">
+                            <div class="d-flex align-center justify-space-between mb-2">
+                                <MudText Typo="Typo.overline" Style="color:#64748B; font-weight:600;">Approved</MudText>
+                                <MudAvatar Style="background:#ECFDF5; color:#10B981; width:36px; height:36px;">
+                                    <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Size="Size.Small" />
+                                </MudAvatar>
+                            </div>
+                            <MudText Typo="Typo.h4" Style="font-weight:700; color:#0F172A;">@approvedRejectedApproval.Count(r => r.Status == "Approved")</MudText>
+                            <MudText Typo="Typo.caption" Style="color:#94A3B8;">Successfully approved</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="3">
+                        <MudPaper Class="pa-4 stat-card hover-card" Elevation="1" Style="--accent-color:#EF4444;">
+                            <div class="d-flex align-center justify-space-between mb-2">
+                                <MudText Typo="Typo.overline" Style="color:#64748B; font-weight:600;">Rejected</MudText>
+                                <MudAvatar Style="background:#FEF2F2; color:#EF4444; width:36px; height:36px;">
+                                    <MudIcon Icon="@Icons.Material.Filled.Cancel" Size="Size.Small" />
+                                </MudAvatar>
+                            </div>
+                            <MudText Typo="Typo.h4" Style="font-weight:700; color:#0F172A;">@approvedRejectedApproval.Count(r => r.Status == "Rejected")</MudText>
+                            <MudText Typo="Typo.caption" Style="color:#94A3B8;">Not approved</MudText>
+                        </MudPaper>
+                    </MudItem>
+                </MudGrid>
+                <MudPaper Elevation="1" Class="pa-4 mb-4">
+                    <div class="d-flex align-center justify-space-between mb-3">
+                        <MudText Typo="Typo.subtitle1" Style="font-weight:600;">
+                            Awaiting Your Approval
+                            @if (awatingApproval.Any())
+                            {
+                                <MudChip T="string" Size="Size.Small" Color="Color.Warning" Class="ml-2">@awatingApproval.Count()</MudChip>
+                            }
+                        </MudText>
+                        <MudButton Size="Size.Small" Href="/manager" Variant="Variant.Text" Color="Color.Primary">View All</MudButton>
+                    </div>
+                    <RequestsTable Requests="awatingApproval" />
+                </MudPaper>
+                <MudPaper Elevation="1" Class="pa-4">
+                    <div class="d-flex align-center justify-space-between mb-3">
+                        <MudText Typo="Typo.subtitle1" Style="font-weight:600;">Recent Activity</MudText>
+                        <MudChip T="string" Size="Size.Small" Color="Color.Primary" Variant="Variant.Outlined">Last 5</MudChip>
+                    </div>                    
+                    <RequestsTable Requests="approvedRejectedApproval" />
+                </MudPaper>
+            </AuthorizeView>
+
+            <!-- ── FinanceAdmin ────────────────────────────────────────── -->
+            <AuthorizeView Roles="FinanceAdmin" Context="_f">
+                @{
+                    var awatingApproval = _requests.Where(r => r.Status == "PendingFinanceReview").ToList();
+                    var approvedRejectedApproval = _requests.Where(r => r.Status == "Approved" || r.Status == "Rejected").ToList();
+                }   
+                <MudGrid Class="mb-6">
+                    <MudItem xs="12" sm="6" md="3">
+                        <MudPaper Class="pa-4 stat-card hover-card" Elevation="1" Style="--accent-color:#3B82F6;">
+                            <div class="d-flex align-center justify-space-between mb-2">
+                                <MudText Typo="Typo.overline" Style="color:#64748B; font-weight:600;">Total Requests</MudText>
+                                <MudAvatar Style="background:#EFF6FF; color:#3B82F6; width:36px; height:36px;">
+                                    <MudIcon Icon="@Icons.Material.Filled.Folder" Size="Size.Small" />
+                                </MudAvatar>
+                            </div>
+                            <MudText Typo="Typo.h4" Style="font-weight:700; color:#0F172A;">@(awatingApproval.Count() + approvedRejectedApproval.Count())</MudText>
+                            <MudText Typo="Typo.caption" Style="color:#94A3B8;">Across all users</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="3">
+                        <MudPaper Class="pa-4 stat-card hover-card" Elevation="1" Style="--accent-color:#8B5CF6;">
+                            <div class="d-flex align-center justify-space-between mb-2">
+                                <MudText Typo="Typo.overline" Style="color:#64748B; font-weight:600;">Awaiting Approval</MudText>
+                                <MudAvatar Style="background:#F5F3FF; color:#8B5CF6; width:36px; height:36px;">
+                                    <MudIcon Icon="@Icons.Material.Filled.AccountBalance" Size="Size.Small" />
+                                </MudAvatar>
+                            </div>
+                            <MudText Typo="Typo.h4" Style="font-weight:700; color:#0F172A;">@awatingApproval.Count()</MudText>
+                            <MudText Typo="Typo.caption" Style="color:#94A3B8;">Needs your action</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="3">
+                        <MudPaper Class="pa-4 stat-card hover-card" Elevation="1" Style="--accent-color:#10B981;">
+                            <div class="d-flex align-center justify-space-between mb-2">
+                                <MudText Typo="Typo.overline" Style="color:#64748B; font-weight:600;">Approved</MudText>
+                                <MudAvatar Style="background:#ECFDF5; color:#10B981; width:36px; height:36px;">
+                                    <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Size="Size.Small" />
+                                </MudAvatar>
+                            </div>
+                            <MudText Typo="Typo.h4" Style="font-weight:700; color:#0F172A;">@approvedRejectedApproval.Count(r => r.Status == "Approved")</MudText>
+                            <MudText Typo="Typo.caption" Style="color:#94A3B8;">Successfully approved</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="3">
+                        <MudPaper Class="pa-4 stat-card hover-card" Elevation="1" Style="--accent-color:#EF4444;">
+                            <div class="d-flex align-center justify-space-between mb-2">
+                                <MudText Typo="Typo.overline" Style="color:#64748B; font-weight:600;">Rejected</MudText>
+                                <MudAvatar Style="background:#FEF2F2; color:#EF4444; width:36px; height:36px;">
+                                    <MudIcon Icon="@Icons.Material.Filled.Cancel" Size="Size.Small" />
+                                </MudAvatar>
+                            </div>
+                            <MudText Typo="Typo.h4" Style="font-weight:700; color:#0F172A;">@approvedRejectedApproval.Count(r => r.Status == "Rejected")</MudText>
+                            <MudText Typo="Typo.caption" Style="color:#94A3B8;">Not approved</MudText>
+                        </MudPaper>
+                    </MudItem>
+                </MudGrid>
+                <MudPaper Elevation="1" Class="pa-4 mb-4">
+                    <div class="d-flex align-center justify-space-between mb-3">
+                        <MudText Typo="Typo.subtitle1" Style="font-weight:600;">
+                            Awaiting Finance Review
+                            @if (awatingApproval.Any())
+                            {
+                                <MudChip T="string" Size="Size.Small" Color="Color.Warning" Class="ml-2">@awatingApproval.Count()</MudChip>
+                            }
+                        </MudText>
+                        <MudButton Size="Size.Small" Href="/finance" Variant="Variant.Text" Color="Color.Primary">View All</MudButton>
+                    </div>                    
+                    <RequestsTable Requests="awatingApproval" />
+                </MudPaper>
+                <MudPaper Elevation="1" Class="pa-4">
+                    <div class="d-flex align-center justify-space-between mb-3">
+                        <MudText Typo="Typo.subtitle1" Style="font-weight:600;">Recent Activity</MudText>
+                        <MudChip T="string" Size="Size.Small" Color="Color.Primary" Variant="Variant.Outlined">Last 5</MudChip>
+                    </div>
+                    <RequestsTable Requests="approvedRejectedApproval" />
+                </MudPaper>
+            </AuthorizeView>
+
+            <!-- ── SystemAdmin ────────────────────────────────────────── -->
+            <AuthorizeView Roles="SystemAdmin" Context="_a">
+                <MudGrid Class="mb-6">
+                    <MudItem xs="12" sm="6" md="3">
+                        <MudPaper Class="pa-4 stat-card hover-card" Elevation="1" Style="--accent-color:#3B82F6;">
+                            <div class="d-flex align-center justify-space-between mb-2">
+                                <MudText Typo="Typo.overline" Style="color:#64748B; font-weight:600;">Total Requests</MudText>
+                                <MudAvatar Style="background:#EFF6FF; color:#3B82F6; width:36px; height:36px;">
+                                    <MudIcon Icon="@Icons.Material.Filled.Folder" Size="Size.Small" />
+                                </MudAvatar>
+                            </div>
+                            <MudText Typo="Typo.h4" Style="font-weight:700; color:#0F172A;">@_requests.Count</MudText>
+                            <MudText Typo="Typo.caption" Style="color:#94A3B8;">All time</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="3">
+                        <MudPaper Class="pa-4 stat-card hover-card" Elevation="1" Style="--accent-color:#F59E0B;">
+                            <div class="d-flex align-center justify-space-between mb-2">
+                                <MudText Typo="Typo.overline" Style="color:#64748B; font-weight:600;">Pending</MudText>
+                                <MudAvatar Style="background:#FFFBEB; color:#F59E0B; width:36px; height:36px;">
+                                    <MudIcon Icon="@Icons.Material.Filled.HourglassEmpty" Size="Size.Small" />
+                                </MudAvatar>
+                            </div>
+                            <MudText Typo="Typo.h4" Style="font-weight:700; color:#0F172A;">
+                                @_requests.Count(r => r.Status is "PendingManagerApproval" or "PendingFinanceReview")
+                            </MudText>
+                            <MudText Typo="Typo.caption" Style="color:#94A3B8;">Awaiting review</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="3">
+                        <MudPaper Class="pa-4 stat-card hover-card" Elevation="1" Style="--accent-color:#10B981;">
+                            <div class="d-flex align-center justify-space-between mb-2">
+                                <MudText Typo="Typo.overline" Style="color:#64748B; font-weight:600;">Approved</MudText>
+                                <MudAvatar Style="background:#ECFDF5; color:#10B981; width:36px; height:36px;">
+                                    <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Size="Size.Small" />
+                                </MudAvatar>
+                            </div>
+                            <MudText Typo="Typo.h4" Style="font-weight:700; color:#0F172A;">@_requests.Count(r => r.Status == "Approved")</MudText>
+                            <MudText Typo="Typo.caption" Style="color:#94A3B8;">Successfully approved</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="3">
+                        <MudPaper Class="pa-4 stat-card hover-card" Elevation="1" Style="--accent-color:#EF4444;">
+                            <div class="d-flex align-center justify-space-between mb-2">
+                                <MudText Typo="Typo.overline" Style="color:#64748B; font-weight:600;">Rejected</MudText>
+                                <MudAvatar Style="background:#FEF2F2; color:#EF4444; width:36px; height:36px;">
+                                    <MudIcon Icon="@Icons.Material.Filled.Cancel" Size="Size.Small" />
+                                </MudAvatar>
+                            </div>
+                            <MudText Typo="Typo.h4" Style="font-weight:700; color:#0F172A;">@_requests.Count(r => r.Status == "Rejected")</MudText>
+                            <MudText Typo="Typo.caption" Style="color:#94A3B8;">Not approved</MudText>
+                        </MudPaper>
+                    </MudItem>
+                </MudGrid>
+                <MudPaper Elevation="1" Class="pa-4">
+                    <div class="d-flex align-center justify-space-between mb-3">
+                        <MudText Typo="Typo.subtitle1" Style="font-weight:600;">Recent Requests</MudText>
+                        <MudButton Size="Size.Small" Href="/admin/requests" Variant="Variant.Text" Color="Color.Primary">View All</MudButton>
+                    </div>
+                    <RequestsTable Requests="_requests.OrderByDescending(r => r.CreatedAt).Take(5).ToList()" />
+                </MudPaper>
+            </AuthorizeView>
         }
     </Authorized>
 </AuthorizeView>
 
 @code {
     List<SponsorshipRequestDto>? _requests;
+
+    List<SponsorshipRequestDto> PendingManagerItems =>
+        _requests?.Where(r => r.Status == "PendingManagerApproval").OrderByDescending(r => r.UpdatedAt).Take(5).ToList() ?? new();
+
+    List<SponsorshipRequestDto> PendingFinanceItems =>
+        _requests?.Where(r => r.Status == "PendingFinanceReview").OrderByDescending(r => r.UpdatedAt).Take(5).ToList() ?? new();
 
     [CascadingParameter] Task<AuthenticationState>? AuthState { get; set; }
 
@@ -110,3 +329,4 @@
             : await Api.GetMyRequestsAsync();
     }
 }
+

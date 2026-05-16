@@ -4,5 +4,5 @@ namespace Sponsorship.Application.Interfaces;
 
 public interface ITokenService
 {
-    string GenerateToken(User user);
+    Task<string> GenerateToken(User user);
 }

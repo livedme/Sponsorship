@@ -1,9 +1,11 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Sponsorship.Application;
 using Sponsorship.Application.Settings;
 using Sponsorship.API.Middleware;
+using Sponsorship.Domain.Entities;
 using Sponsorship.Infrastructure;
 using Sponsorship.Infrastructure.Data;
 
@@ -46,7 +48,10 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    await DataSeeder.SeedAsync(scope.ServiceProvider.GetRequiredService<AppDbContext>());
+    await DataSeeder.SeedAsync(
+        scope.ServiceProvider.GetRequiredService<AppDbContext>(),
+        scope.ServiceProvider.GetRequiredService<UserManager<User>>(),
+        scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>());
 }
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();

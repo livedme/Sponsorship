@@ -2,8 +2,8 @@
 
 <MudCard Elevation="5"  Class="mt-5">
     <MudCardContent>       
-        <PageTitle>New Sponsorship Request</PageTitle>
-        <MudText Typo="Typo.h5" Class="mb-4">New Sponsorship Request</MudText>
+        <PageTitle>@Title</PageTitle>
+        <MudText Typo="Typo.h5" Class="mb-4">@Title</MudText>
 
         <div class="form-section-title">Basic Information</div>
         <MudGrid Class="mb-2">
@@ -78,6 +78,7 @@
 </MudCard>
 
 @code {
+    [Parameter] public string Title { get; set; } = "New Sponsorship Request";
     [Parameter] public CreateSponsorshipRequestDto Model { get; set; } = new();
     [Parameter] public List<SponsorshipTypeDto> Types { get; set; } = new();
     [Parameter] public EventCallback<CreateSponsorshipRequestDto> OnSubmit { get; set; }
