@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Sponsorship.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8f2b60d7a905066a5b6c5c8442379aec0ca5d8e1")]
 [assembly: System.Reflection.AssemblyProductAttribute("Sponsorship.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Sponsorship.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

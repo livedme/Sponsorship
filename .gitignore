@@ -1,10 +1,12 @@
 # Build output
 **/bin/
 **/obj/
-/src/Sponsorship.API/obj
-/src/Sponsorship.Application/obj
-/src/Sponsorship.Infrastructure/obj
-/src/Sponsorship.Infrastructure/obj
-/src/Sponsorship.Infrastructure/bin
 /.vs
 /src/Sponsorship.API/obj
+/src/Sponsorship.API/bin
+/src/Sponsorship.Application/obj
+/src/Sponsorship.Application/bin
+/src/Sponsorship.Infrastructure/obj
+/src/Sponsorship.Infrastructure/bin
+
+
