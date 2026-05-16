@@ -16,7 +16,7 @@ public static class InfrastructureExtensions
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, string connectionString)
     {
         services.AddDbContext<AppDbContext>(options =>
-            options.UseNpgsql(connectionString));
+            options.UseSqlServer(connectionString));
 
         // ASP.NET Identity (user management, role management & password hashing)
         services.AddIdentityCore<User>(options =>

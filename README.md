@@ -76,8 +76,8 @@ Draft ──▶ PendingManagerApproval ──▶ PendingFinanceReview ──▶ 
 
 ### Prerequisites
 
-- .NET 8 SDK
-- PostgreSQL 14+
+- .NET 10 SDK
+- SQL Server 2019+ (or SQL Server Express / LocalDB)
 - `dotnet-ef` global tool: `dotnet tool install -g dotnet-ef`
 
 ### 1. Configure the database
@@ -86,7 +86,7 @@ Update `src/Sponsorship.API/appsettings.json`:
 
 ```json
 "ConnectionStrings": {
-  "Default": "Host=localhost;Port=5432;Database=SponsorshipDb;Username=postgres;Password=<your-password>"
+  "Default": "Server=localhost;Database=SponsorshipDb;Trusted_Connection=True;TrustServerCertificate=True;"
 }
 ```
 
@@ -129,7 +129,7 @@ dotnet run
 
 | Variable | Description |
 |---|---|
-| `ConnectionStrings__Default` | PostgreSQL connection string |
+| `ConnectionStrings__Default` | SQL Server connection string |
 | `Jwt__Key` | JWT signing key (≥32 chars) |
 | `Jwt__Issuer` | JWT issuer |
 | `Jwt__Audience` | JWT audience |
