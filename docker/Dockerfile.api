@@ -1,0 +1,39 @@
+﻿# == Build stage ==============================================================
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /src
+
+# Copy project files first for better layer caching
+COPY Sponsorship.slnx ./
+COPY src/Sponsorship.Domain/Sponsorship.Domain.csproj              src/Sponsorship.Domain/
+COPY src/Sponsorship.Application/Sponsorship.Application.csproj    src/Sponsorship.Application/
+COPY src/Sponsorship.Infrastructure/Sponsorship.Infrastructure.csproj src/Sponsorship.Infrastructure/
+COPY src/Sponsorship.API/Sponsorship.API.csproj                    src/Sponsorship.API/
+
+RUN dotnet restore src/Sponsorship.API/Sponsorship.API.csproj
+
+# Copy all source then publish (Release, no AppHost for smaller image)
+COPY . .
+RUN dotnet publish src/Sponsorship.API/Sponsorship.API.csproj \
+    -c Release \
+    -o /app/publish \
+    --no-restore \
+    /p:UseAppHost=false
+
+# == Runtime stage ============================================================
+# aspnet:10.0 ~200 MB -- fits within Render.com free tier (512 MB RAM limit)
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
+WORKDIR /app
+
+# Copy published output owned by the built-in non-root 'app' user (.NET 8+)
+COPY --from=build --chown=app:app /app/publish .
+
+USER app
+
+# Render injects PORT and forwards it to ASPNETCORE_HTTP_PORTS (render.yaml).
+# Do NOT set ASPNETCORE_URLS here — it has higher priority than
+# ASPNETCORE_HTTP_PORTS and would override Render's dynamic port injection.
+# Default used only for plain `docker run` without render.yaml env vars.
+ENV ASPNETCORE_HTTP_PORTS=5000
+EXPOSE 5000
+
+ENTRYPOINT ["dotnet", "Sponsorship.API.dll"]

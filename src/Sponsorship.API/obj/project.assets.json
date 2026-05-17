@@ -34,6 +34,22 @@
           "Microsoft.AspNetCore.App"
         ]
       },
+      "Microsoft.AspNetCore.Identity.EntityFrameworkCore/10.0.8": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore.Relational": "10.0.8"
+        },
+        "compile": {
+          "lib/net10.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.Build.Framework/18.0.2": {
         "type": "package",
         "compile": {
@@ -875,12 +891,16 @@
         },
         "runtime": {
           "bin/placeholder/Sponsorship.Domain.dll": {}
-        }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       },
       "Sponsorship.Infrastructure/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
         "dependencies": {
+          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "10.0.8",
           "Microsoft.IdentityModel.Tokens": "8.18.0",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "10.0.1",
           "Sponsorship.Application": "1.0.0",
@@ -928,6 +948,22 @@
         "lib/net10.0/Microsoft.AspNetCore.Authentication.JwtBearer.xml",
         "microsoft.aspnetcore.authentication.jwtbearer.10.0.8.nupkg.sha512",
         "microsoft.aspnetcore.authentication.jwtbearer.nuspec"
+      ]
+    },
+    "Microsoft.AspNetCore.Identity.EntityFrameworkCore/10.0.8": {
+      "sha512": "GvUGVaFpAihzb0MEUVunhwFNVI/s9wCtOidbaz4JucM3W/YiMtccki9Gm+qcoxlPxQyGpAxX11bvEghL87TMGA==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.identity.entityframeworkcore/10.0.8",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "PACKAGE.md",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net10.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll",
+        "lib/net10.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.xml",
+        "microsoft.aspnetcore.identity.entityframeworkcore.10.0.8.nupkg.sha512",
+        "microsoft.aspnetcore.identity.entityframeworkcore.nuspec"
       ]
     },
     "Microsoft.Build.Framework/18.0.2": {
@@ -2754,11 +2790,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\Microskill\\Singapur\\src\\Sponsorship.API\\Sponsorship.API.csproj",
+      "projectUniqueName": "F:\\Microskill\\Sponsorship\\src\\Sponsorship.API\\Sponsorship.API.csproj",
       "projectName": "Sponsorship.API",
-      "projectPath": "F:\\Microskill\\Singapur\\src\\Sponsorship.API\\Sponsorship.API.csproj",
+      "projectPath": "F:\\Microskill\\Sponsorship\\src\\Sponsorship.API\\Sponsorship.API.csproj",
       "packagesPath": "C:\\Users\\Aminul\\.nuget\\packages\\",
-      "outputPath": "F:\\Microskill\\Singapur\\src\\Sponsorship.API\\obj\\",
+      "outputPath": "F:\\Microskill\\Sponsorship\\src\\Sponsorship.API\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -2781,11 +2817,11 @@
           "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
-            "F:\\Microskill\\Singapur\\src\\Sponsorship.Application\\Sponsorship.Application.csproj": {
-              "projectPath": "F:\\Microskill\\Singapur\\src\\Sponsorship.Application\\Sponsorship.Application.csproj"
+            "F:\\Microskill\\Sponsorship\\src\\Sponsorship.Application\\Sponsorship.Application.csproj": {
+              "projectPath": "F:\\Microskill\\Sponsorship\\src\\Sponsorship.Application\\Sponsorship.Application.csproj"
             },
-            "F:\\Microskill\\Singapur\\src\\Sponsorship.Infrastructure\\Sponsorship.Infrastructure.csproj": {
-              "projectPath": "F:\\Microskill\\Singapur\\src\\Sponsorship.Infrastructure\\Sponsorship.Infrastructure.csproj"
+            "F:\\Microskill\\Sponsorship\\src\\Sponsorship.Infrastructure\\Sponsorship.Infrastructure.csproj": {
+              "projectPath": "F:\\Microskill\\Sponsorship\\src\\Sponsorship.Infrastructure\\Sponsorship.Infrastructure.csproj"
             }
           }
         }

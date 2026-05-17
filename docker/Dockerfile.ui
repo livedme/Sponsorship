@@ -1,0 +1,30 @@
+# ── Build stage ─────────────────────────────────────────────────────────────
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /src
+
+# Restore layer (cached unless .csproj files change)
+COPY Sponsorship.slnx ./
+COPY src/Sponsorship.BlazorUI/Sponsorship.BlazorUI.csproj src/Sponsorship.BlazorUI/
+RUN dotnet restore src/Sponsorship.BlazorUI/Sponsorship.BlazorUI.csproj
+
+# Publish
+COPY . .
+RUN dotnet publish src/Sponsorship.BlazorUI/Sponsorship.BlazorUI.csproj \
+    -c Release -o /app/publish --no-restore
+
+# ── Runtime stage ────────────────────────────────────────────────────────────
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
+WORKDIR /app
+
+COPY --from=build --chown=app:app /app/publish .
+
+# Built-in non-root user (available since .NET 8 runtime images)
+USER app
+
+# Render.com injects PORT=10000 at runtime.
+# ASPNETCORE_HTTP_PORTS is the .NET 8+ env var that replaces ASPNETCORE_URLS.
+# The default here is only used for local `docker run` without -e PORT.
+ENV ASPNETCORE_HTTP_PORTS=10000
+EXPOSE 10000
+
+ENTRYPOINT ["dotnet", "Sponsorship.BlazorUI.dll"]

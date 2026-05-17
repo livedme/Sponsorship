@@ -26,7 +26,10 @@
         },
         "runtime": {
           "bin/placeholder/Sponsorship.Domain.dll": {}
-        }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       }
     }
   },
@@ -81,11 +84,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\Microskill\\Singapur\\src\\Sponsorship.Application\\Sponsorship.Application.csproj",
+      "projectUniqueName": "F:\\Microskill\\Sponsorship\\src\\Sponsorship.Application\\Sponsorship.Application.csproj",
       "projectName": "Sponsorship.Application",
-      "projectPath": "F:\\Microskill\\Singapur\\src\\Sponsorship.Application\\Sponsorship.Application.csproj",
+      "projectPath": "F:\\Microskill\\Sponsorship\\src\\Sponsorship.Application\\Sponsorship.Application.csproj",
       "packagesPath": "C:\\Users\\Aminul\\.nuget\\packages\\",
-      "outputPath": "F:\\Microskill\\Singapur\\src\\Sponsorship.Application\\obj\\",
+      "outputPath": "F:\\Microskill\\Sponsorship\\src\\Sponsorship.Application\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -108,8 +111,8 @@
           "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
-            "F:\\Microskill\\Singapur\\src\\Sponsorship.Domain\\Sponsorship.Domain.csproj": {
-              "projectPath": "F:\\Microskill\\Singapur\\src\\Sponsorship.Domain\\Sponsorship.Domain.csproj"
+            "F:\\Microskill\\Sponsorship\\src\\Sponsorship.Domain\\Sponsorship.Domain.csproj": {
+              "projectPath": "F:\\Microskill\\Sponsorship\\src\\Sponsorship.Domain\\Sponsorship.Domain.csproj"
             }
           }
         }
