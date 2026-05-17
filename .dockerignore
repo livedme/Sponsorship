@@ -1,0 +1,22 @@
+# Exclude build outputs — prevents Windows-generated obj/bin folders
+# (which contain project.assets.json with Windows NuGet paths) from
+# being copied into the Linux build container and breaking dotnet publish.
+**/bin/
+**/obj/
+
+# Git internals
+.git/
+.gitignore
+
+# IDE / OS noise
+.vs/
+**/*.user
+**/.DS_Store
+**/Thumbs.db
+
+# Docker files themselves (not needed in the build context)
+Dockerfile
+docker/
+
+# Local developer config overrides
+**/appsettings.Development.json
