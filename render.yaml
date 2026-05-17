@@ -6,7 +6,7 @@ services:
   - type: web
     name: sponsorship-api
     runtime: docker
-    dockerfilePath: ./Dockerfile.api
+    dockerfilePath: ./Dockerfile/Dockerfile.api
     dockerContext: .
     plan: free
     healthCheckPath: /health
@@ -32,7 +32,7 @@ services:
   - type: web
     name: sponsorship-ui
     runtime: docker
-    dockerfilePath: ./Dockerfile.ui
+    dockerfilePath: ./Dockerfile/Dockerfile.ui
     dockerContext: .
     plan: free
     envVars:

@@ -19,13 +19,10 @@ RUN dotnet publish src/Sponsorship.BlazorUI/Sponsorship.BlazorUI.csproj \
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 WORKDIR /app
 
-# Run as non-root
-RUN addgroup --system --gid 1001 appgroup \
- && adduser  --system --uid 1001 --ingroup appgroup appuser
+COPY --from=build --chown=app:app /app/publish .
 
-COPY --from=build /app/publish .
-RUN chown -R appuser:appgroup /app
-USER appuser
+# Use the built-in non-root 'app' user (available since .NET 8 runtime images)
+USER app
 
 ENV ASPNETCORE_URLS=http://+:7001
 EXPOSE 7001
