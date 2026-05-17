@@ -10,7 +10,7 @@ services:
   - type: web
     name: sponsorship-api
     runtime: docker
-    dockerfilePath: ./docker/Dockerfile.api
+    dockerfilePath: ./Dockerfile          # root-level; also default for dashboard deploys
     dockerContext: .
     plan: free
     healthCheckPath: /swagger               # Swagger is available on free/test

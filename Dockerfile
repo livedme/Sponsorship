@@ -1,4 +1,9 @@
-﻿# == Build stage ==============================================================
+# Sponsorship.API — root-level Dockerfile
+# Used by Render.com when the service is configured without a Blueprint
+# (dashboard deploy defaults to ./Dockerfile in the repo root).
+# render.yaml Blueprint points here via dockerfilePath: ./Dockerfile
+
+# == Build stage ==============================================================
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
@@ -29,10 +34,9 @@ COPY --from=build --chown=app:app /app/publish .
 
 USER app
 
-# Render injects PORT and forwards it to ASPNETCORE_HTTP_PORTS (render.yaml).
-# Do NOT set ASPNETCORE_URLS here — it has higher priority than
-# ASPNETCORE_HTTP_PORTS and would override Render's dynamic port injection.
-# Default used only for plain `docker run` without render.yaml env vars.
+# Render injects PORT and forwards it to ASPNETCORE_HTTP_PORTS via render.yaml.
+# Do NOT set ASPNETCORE_URLS here — it has higher priority and would override
+# Render's dynamic port injection via ASPNETCORE_HTTP_PORTS.
 ENV ASPNETCORE_HTTP_PORTS=5000
 EXPOSE 5000
 
