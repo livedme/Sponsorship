@@ -10,7 +10,7 @@ services:
   - type: web
     name: sponsorship-api
     runtime: docker
-    dockerfilePath: ./Dockerfile/Dockerfile.api
+    dockerfilePath: ./docker/Dockerfile.api
     dockerContext: .
     plan: free
     healthCheckPath: /swagger               # Swagger is available on free/test
@@ -36,7 +36,7 @@ services:
   - type: web
     name: sponsorship-ui
     runtime: docker
-    dockerfilePath: ./Dockerfile/Dockerfile.ui
+    dockerfilePath: ./docker/Dockerfile.ui
     dockerContext: .
     plan: free
     envVars:
