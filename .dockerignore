@@ -28,6 +28,5 @@ JobDescription.md
 *.md
 
 # Docker
-**/Dockerfile
 docker-compose*.yml
 .dockerignore
