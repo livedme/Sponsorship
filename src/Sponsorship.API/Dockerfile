@@ -1,0 +1,37 @@
+# Build stage
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /src
+
+# Copy solution and project files first for layer caching
+COPY Sponsorship.slnx ./
+COPY src/Sponsorship.Domain/Sponsorship.Domain.csproj             src/Sponsorship.Domain/
+COPY src/Sponsorship.Application/Sponsorship.Application.csproj   src/Sponsorship.Application/
+COPY src/Sponsorship.Infrastructure/Sponsorship.Infrastructure.csproj src/Sponsorship.Infrastructure/
+COPY src/Sponsorship.API/Sponsorship.API.csproj                   src/Sponsorship.API/
+
+RUN dotnet restore src/Sponsorship.API/Sponsorship.API.csproj
+
+# Copy all source files and publish
+COPY . .
+RUN dotnet publish src/Sponsorship.API/Sponsorship.API.csproj \
+    -c Release \
+    -o /app/publish \
+    --no-restore
+
+# Runtime stage
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
+WORKDIR /app
+
+# Non-root user for security
+RUN addgroup --system --gid 1001 appgroup \
+ && adduser  --system --uid 1001 --ingroup appgroup appuser
+
+COPY --from=build /app/publish .
+RUN chown -R appuser:appgroup /app
+
+USER appuser
+
+ENV ASPNETCORE_URLS=http://+:5000
+EXPOSE 5000
+
+ENTRYPOINT ["dotnet", "Sponsorship.API.dll"]

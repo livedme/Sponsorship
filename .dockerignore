@@ -1,0 +1,33 @@
+# Build output
+**/bin/
+**/obj/
+
+# IDE / OS
+.vs/
+.vscode/
+*.user
+*.suo
+*.swp
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Publish profiles & local overrides
+**/Properties/PublishProfiles/
+**/appsettings.Development.json
+
+# Docs & misc
+README.md
+ExecutionPlan.md
+JobDescription.md
+*.bak
+*.md
+
+# Docker
+**/Dockerfile
+docker-compose*.yml
+.dockerignore

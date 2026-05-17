@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Sponsorship.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+14c31cb68acc025e9966ceae2dfa709dd2161907")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+996d3847393e88676755d07118152f67bc533267")]
 [assembly: System.Reflection.AssemblyProductAttribute("Sponsorship.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Sponsorship.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

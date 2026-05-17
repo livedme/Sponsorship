@@ -1,0 +1,55 @@
+# render.yaml — Render.com Blueprint
+# Docs: https://render.com/docs/blueprint-spec
+
+services:
+  # ── API ──────────────────────────────────────────────────────────────────
+  - type: web
+    name: sponsorship-api
+    runtime: docker
+    dockerfilePath: ./src/Sponsorship.API/Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ASPNETCORE_URLS
+        value: http://+:5000
+      - key: ConnectionStrings__Default
+        fromDatabase:
+          name: sponsorship-db
+          property: connectionString
+      - key: Jwt__Key
+        generateValue: true          # Render generates a random secret
+      - key: Jwt__Issuer
+        value: SponsorshipAPI
+      - key: Jwt__Audience
+        value: SponsorshipUI
+      - key: Jwt__ExpiryMinutes
+        value: "480"
+
+  # ── Blazor UI ────────────────────────────────────────────────────────────
+  - type: web
+    name: sponsorship-ui
+    runtime: docker
+    dockerfilePath: ./src/Sponsorship.BlazorUI/Dockerfile
+    dockerContext: .
+    plan: free
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ASPNETCORE_URLS
+        value: http://+:7001
+      - key: ApiSettings__BaseUrl
+        fromService:
+          name: sponsorship-api
+          type: web
+          property: host
+          # Render exposes the service host; prefix with https://
+          # Override manually after first deploy if needed.
+
+databases:
+  # ── PostgreSQL ────────────────────────────────────────────────────────────
+  - name: sponsorship-db
+    databaseName: sponsorshipdb
+    plan: free
