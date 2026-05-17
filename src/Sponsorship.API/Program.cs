@@ -44,6 +44,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(p => p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
+// Health check used by render.yaml healthCheckPath: /health
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -55,7 +58,11 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
-app.UseHttpsRedirection();
+
+// Render.com terminates TLS at its edge proxy — only redirect HTTPS locally.
+if (app.Environment.IsDevelopment())
+    app.UseHttpsRedirection();
+
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
@@ -63,6 +70,7 @@ app.UseAuthorization();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.MapHealthChecks("/health");
 app.MapGet("/", () => Results.Redirect("/swagger"));
 app.MapControllers();
 

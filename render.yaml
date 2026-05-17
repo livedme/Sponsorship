@@ -1,5 +1,9 @@
 # render.yaml — Render.com Blueprint
 # Docs: https://render.com/docs/blueprint-spec
+#
+# Render injects PORT=10000 into every web service container.
+# ASP.NET Core 8+ reads ASPNETCORE_HTTP_PORTS to bind the server.
+# We sync PORT → ASPNETCORE_HTTP_PORTS so the app listens on the right port.
 
 services:
   # ── API ──────────────────────────────────────────────────────────────────
@@ -9,18 +13,18 @@ services:
     dockerfilePath: ./Dockerfile/Dockerfile.api
     dockerContext: .
     plan: free
-    healthCheckPath: /health
+    healthCheckPath: /swagger               # Swagger is available on free/test
     envVars:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
-      - key: ASPNETCORE_URLS
-        value: http://+:5000
+      - key: ASPNETCORE_HTTP_PORTS         # forward Render's PORT to .NET
+        fromEnv: PORT
       - key: ConnectionStrings__Default
         fromDatabase:
           name: sponsorship-db
           property: connectionString
       - key: Jwt__Key
-        generateValue: true          # Render generates a random secret
+        generateValue: true                 # Render auto-generates a secure secret
       - key: Jwt__Issuer
         value: SponsorshipAPI
       - key: Jwt__Audience
@@ -38,15 +42,10 @@ services:
     envVars:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
-      - key: ASPNETCORE_URLS
-        value: http://+:7001
-      - key: ApiSettings__BaseUrl
-        fromService:
-          name: sponsorship-api
-          type: web
-          property: host
-          # Render exposes the service host; prefix with https://
-          # Override manually after first deploy if needed.
+      - key: ASPNETCORE_HTTP_PORTS         # forward Render's PORT to .NET
+        fromEnv: PORT
+      - key: ApiSettings__BaseUrl          # set to the deployed API URL after first deploy
+        value: https://sponsorship-api.onrender.com
 
 databases:
   # ── PostgreSQL ────────────────────────────────────────────────────────────

@@ -1,32 +1,36 @@
-# Build stage
+﻿# == Build stage ==============================================================
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
-# Copy project files first for layer caching
+# Copy project files first for better layer caching
 COPY Sponsorship.slnx ./
-COPY src/Sponsorship.Domain/Sponsorship.Domain.csproj             src/Sponsorship.Domain/
-COPY src/Sponsorship.Application/Sponsorship.Application.csproj   src/Sponsorship.Application/
+COPY src/Sponsorship.Domain/Sponsorship.Domain.csproj              src/Sponsorship.Domain/
+COPY src/Sponsorship.Application/Sponsorship.Application.csproj    src/Sponsorship.Application/
 COPY src/Sponsorship.Infrastructure/Sponsorship.Infrastructure.csproj src/Sponsorship.Infrastructure/
-COPY src/Sponsorship.API/Sponsorship.API.csproj                   src/Sponsorship.API/
+COPY src/Sponsorship.API/Sponsorship.API.csproj                    src/Sponsorship.API/
 
 RUN dotnet restore src/Sponsorship.API/Sponsorship.API.csproj
 
-# Copy all source and publish
+# Copy all source then publish (Release, no AppHost for smaller image)
 COPY . .
 RUN dotnet publish src/Sponsorship.API/Sponsorship.API.csproj \
     -c Release \
     -o /app/publish \
-    --no-restore
+    --no-restore \
+    /p:UseAppHost=false
 
-# Runtime stage
+# == Runtime stage ============================================================
+# aspnet:10.0 ~200 MB -- fits within Render.com free tier (512 MB RAM limit)
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 WORKDIR /app
 
+# Copy published output owned by the built-in non-root 'app' user (.NET 8+)
 COPY --from=build --chown=app:app /app/publish .
 
-# Use the built-in non-root 'app' user (available since .NET 8 runtime images)
 USER app
 
+# Render terminates TLS at its edge proxy -- listen on plain HTTP.
+# render.yaml sets ASPNETCORE_URLS=http://+:5000 via envVars (same value).
 ENV ASPNETCORE_URLS=http://+:5000
 EXPOSE 5000
 
