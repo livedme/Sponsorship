@@ -60,6 +60,9 @@ Draft ──▶ PendingManagerApproval ──▶ PendingFinanceReview ──▶ 
 | `SystemAdmin` | View all requests, full audit log, manage sponsorship types |
 
 ---
+## Test url
+Web Api: https://sponsorship-cgh6.onrender.com/swagger/index.html
+Frontend Web: https://www.avancerapp.com
 
 ## Test Accounts
 
