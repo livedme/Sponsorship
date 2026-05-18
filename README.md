@@ -4,6 +4,45 @@ A multi-role enterprise workflow application for managing sponsorship requests t
 
 ---
 
+## Technology Summary
+
+### Platform & Language
+- **.NET 10** — target framework across all projects
+- **C#** — primary language
+
+### Backend (API)
+- **ASP.NET Core 10** — Web API framework
+- **JWT Authentication** (`Microsoft.AspNetCore.Authentication.JwtBearer`) — token-based auth
+- **Swagger / Swashbuckle** (v9) — API documentation & testing UI
+
+### Frontend (UI)
+- **Blazor Server** — server-side rendered SPA
+- **MudBlazor** (v9.4) — Material Design UI component library
+
+### Data Access
+- **Entity Framework Core 10** — ORM
+- **Npgsql EF Core Provider** — PostgreSQL driver for EF Core
+- **ASP.NET Core Identity** — user/role management
+
+### Database
+- **PostgreSQL 18** — primary relational database
+
+### Security
+- **JWT tokens** (`System.IdentityModel.Tokens.Jwt`) — authentication
+- **Custom `PasswordHasher`** + `System.Security.Cryptography.Xml`
+- **RBAC** — 4 roles: Requestor, Manager, FinanceAdmin, SystemAdmin
+
+### Architecture Pattern
+- **Clean Architecture** — Domain / Application / Infrastructure / API layers
+- **Unit of Work + Repository pattern**
+- **Dependency Injection** (`Microsoft.Extensions.DependencyInjection`)
+
+### Containerization & Deployment
+- **Docker** — `Dockerfile` + `docker/Dockerfile.ui` for API and UI
+- **Render.com** — hosting platform (`render.yaml`)
+
+---
+
 ## Architecture
 
 ```
@@ -61,8 +100,8 @@ Draft ──▶ PendingManagerApproval ──▶ PendingFinanceReview ──▶ 
 
 ---
 ## Test url
-- .NET 10 SDKWeb Api: https://sponsorship-cgh6.onrender.com/swagger/index.html
-- PostgreSQL 18Frontend Web: https://www.avancerapp.com
+- Web Api: https://sponsorship-cgh6.onrender.com/swagger/index.html
+- Frontend UI: https://www.avancerapp.com
 
 ## Test Accounts
 
