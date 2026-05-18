@@ -61,8 +61,8 @@ Draft ──▶ PendingManagerApproval ──▶ PendingFinanceReview ──▶ 
 
 ---
 ## Test url
-| Web Api: https://sponsorship-cgh6.onrender.com/swagger/index.html |
-| Frontend Web: https://www.avancerapp.com |
+- .NET 10 SDKWeb Api: https://sponsorship-cgh6.onrender.com/swagger/index.html
+- PostgreSQL 18Frontend Web: https://www.avancerapp.com
 
 ## Test Accounts
 
