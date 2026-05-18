@@ -9,7 +9,7 @@ A multi-role enterprise workflow application for managing sponsorship requests t
 ```
 ┌─────────────────────┐        HTTP/REST        ┌────────────────────────┐
 │  Sponsorship.BlazorUI│ ───────────────────────▶│  Sponsorship.API       │
-│  (Blazor Server)    │                          │  (ASP.NET Core 8)      │
+│  (Blazor Server)    │                          │  (ASP.NET Core 10)      │
 │  Port: 7001         │                          │  Port: 5000            │
 └─────────────────────┘                          └──────────┬─────────────┘
                                                              │
@@ -76,8 +76,8 @@ Draft ──▶ PendingManagerApproval ──▶ PendingFinanceReview ──▶ 
 
 ### Prerequisites
 
-- .NET 8 SDK
-- PostgreSQL 14+
+- .NET 10 SDK
+- PostgreSQL 18
 - `dotnet-ef` global tool: `dotnet tool install -g dotnet-ef`
 
 ### 1. Configure the database
